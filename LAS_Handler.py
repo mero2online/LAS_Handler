@@ -24,6 +24,9 @@ def convertLithoToLas():
     insertText(text3())
     insertText(res.get('textThreeLas'))
 
+def convertLithoPercentToLas():
+    print('convertLithoPercentToLas')
+
 
 def browseFile():
     # open-file dialog
@@ -77,26 +80,33 @@ def insertText(txt):
 
 root = Tk()
 
-Button(root, text="Browse File", background='#e00707',
-       command=browseFile).grid(row=0, column=0)
+Button(root, text="Browse File", background='#633192', foreground='#faebd7', borderwidth=2, relief="raised", padx=5, pady=5,
+       command=browseFile).grid(row=0, column=0, padx=5, pady=5, sticky=W)
 
-Button(root, text="Convert", background='#e00707',
-       command=convertLithoToLas).grid(row=0, column=1)
+Button(root, text="Convert Litho", background='#3c0470', foreground='#faebd7', borderwidth=2, relief="groove", padx=5, pady=5,
+       command=convertLithoToLas).grid(row=0, column=1, padx=5, pady=5, sticky=W)
 
-Button(root, text="Save File", background='#e00707',
-       command=saveFile).grid(row=0, column=2)
+Button(root, text="Convert Litho %", background='#3c0470', foreground='#faebd7', borderwidth=2, relief="groove", padx=5, pady=5,
+       command=convertLithoPercentToLas).grid(row=0, column=1, padx=105, pady=5, sticky=W)
+
+Button(root, text="Save File", background='#633192', foreground='#faebd7', borderwidth=2, relief="raised", padx=5, pady=5,
+       command=saveFile).grid(row=0, column=3, padx=5, pady=5, sticky=W)
 
 group1 = LabelFrame(root, text="Text Box", padx=5, pady=5)
-group1.grid(row=2, column=0, columnspan=4, padx=10, pady=10, sticky=E+W+N+S)
+group1.grid(row=1, column=0, columnspan=4, padx=10, pady=10, sticky=E+W+N+S)
 
 # Create the textbox
-txtbox = scrolledtext.ScrolledText(group1, width=130)
-txtbox.grid(row=1, column=0, columnspan=4, sticky=E+W+N+S)
+txtbox = scrolledtext.ScrolledText(group1)
+txtbox.grid(row=0, column=0, columnspan=4, sticky=E+W+N+S)
 
 root.title('LAS_Handler')
 root.geometry('1100x500')
 root.configure(bg='#000')
-root.resizable(False, False)
+root.grid_columnconfigure(1, weight=1)
+root.grid_rowconfigure(1, weight=1)
+group1.grid_columnconfigure(0, weight=1)
+group1.grid_rowconfigure(0, weight=1)
+# root.resizable(False, False)
 # Setting icon of master window
 root.iconbitmap(resource_path('las.ico'))
 # Start program
