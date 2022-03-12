@@ -3,7 +3,7 @@ from tkinter import *
 from tkinter import scrolledtext
 import lasio
 from my_const import *
-from func import *
+from GetFunc import *
 import datetime
 import os
 import sys
