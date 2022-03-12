@@ -5,22 +5,12 @@ import lasio
 from my_const import *
 from GetFunc import *
 import datetime
-import os
-import sys
+from HelperFunc import resource_path
 
 filetypes = (
     ('LAS files', '*.las'),
     ('All files', '*.*'),
 )
-
-
-def resource_path(relative_path):
-    try:
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(".")
-
-    return os.path.join(base_path, 'src\\', relative_path)
 
 
 def gen_litho_LAS(filename):
