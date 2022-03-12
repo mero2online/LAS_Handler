@@ -4,7 +4,7 @@ from tkinter import scrolledtext
 from my_const import *
 
 from HelperFunc import resource_path
-from HandleLithoLAS import gen_litho_LAS
+from ConvertLithoLAS import convert_Litho_LAS
 
 filetypes = (
     ('LAS files', '*.las'),
@@ -13,29 +13,16 @@ filetypes = (
 
 
 def convertLithoToLas():
-    gen_litho_LAS(resource_path('input.las'))
-
-    f = open(resource_path('draft.las'), 'r')
-    txt = f.read()
-    f.close()
-
-    startOne = '~Well ------------------------------------------------------'
-    endOne = '~Curve Information -----------------------------------------'
-    textOneLas = txt[txt.find(startOne)+len(startOne):txt.rfind(endOne)]
-    startTwo = '~Curve Information -----------------------------------------'
-    endTwo = '~Params ----------------------------------------------------'
-    textTwoLas = txt[txt.find(startTwo)+len(startTwo):txt.rfind(endTwo)]
-    startThree = '~ASCII -----------------------------------------------------'
-    textThreeLas = txt[txt.find(startThree)+len(startThree):len(txt)-1]
+    res = convert_Litho_LAS()
 
     addText(text1())
-    insertText(textOneLas)
+    insertText(res.get('textOneLas'))
 
     insertText(text2())
-    insertText(textTwoLas)
+    insertText(res.get('textTwoLas'))
 
     insertText(text3())
-    insertText(textThreeLas)
+    insertText(res.get('textThreeLas'))
 
 
 def browseFile():
