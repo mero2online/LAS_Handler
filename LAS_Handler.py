@@ -29,13 +29,13 @@ def convertLithoToLas():
     textThreeLas = txt[txt.find(startThree)+len(startThree):len(txt)-1]
 
     addText(text1())
-    txtbox.insert(INSERT, textOneLas)
+    insertText(textOneLas)
 
-    txtbox.insert(INSERT, text2())
-    txtbox.insert(INSERT, textTwoLas)
+    insertText(text2())
+    insertText(textTwoLas)
 
-    txtbox.insert(INSERT, text3())
-    txtbox.insert(INSERT, textThreeLas)
+    insertText(text3())
+    insertText(textThreeLas)
 
 
 def browseFile():
@@ -84,20 +84,20 @@ def addText(txt):
     txtbox.insert(INSERT, txt)
 
 
+def insertText(txt):
+    txtbox.insert(INSERT, txt)
+
+
 root = Tk()
 
 Button(root, text="Browse File", background='#e00707',
        command=browseFile).grid(row=0, column=0)
 
-Button(root, text="Save File", background='#e00707',
-       command=saveFile).grid(row=0, column=1)
-
-Button(root, text="Get Text", background='#e00707',
-       command=getText).grid(row=0, column=2)
-
 Button(root, text="Convert", background='#e00707',
-       command=convertLithoToLas).grid(row=0, column=3)
+       command=convertLithoToLas).grid(row=0, column=1)
 
+Button(root, text="Save File", background='#e00707',
+       command=saveFile).grid(row=0, column=2)
 
 group1 = LabelFrame(root, text="Text Box", padx=5, pady=5)
 group1.grid(row=2, column=0, columnspan=4, padx=10, pady=10, sticky=E+W+N+S)
