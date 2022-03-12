@@ -24,6 +24,7 @@ def convertLithoToLas():
     insertText(text3())
     insertText(res.get('textThreeLas'))
 
+
 def convertLithoPercentToLas():
     print('convertLithoPercentToLas')
 
@@ -35,10 +36,7 @@ def browseFile():
         filetypes=filetypes,)
     # root.destroy()
 
-    f = open(resource_path('input.las'), 'w')
-    f.close()
-    f = open(resource_path('draft.las'), 'w')
-    f.close()
+    clearFiles()
 
     f = open(filename, 'r')
     txt = f.read()
@@ -77,6 +75,15 @@ def addText(txt):
 def insertText(txt):
     txtbox.insert(INSERT, txt)
 
+
+def clearFiles():
+    f = open(resource_path('input.las'), 'w')
+    f.close()
+    f = open(resource_path('draft.las'), 'w')
+    f.close()
+
+
+clearFiles()
 
 root = Tk()
 
