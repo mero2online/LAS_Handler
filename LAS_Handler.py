@@ -1,9 +1,10 @@
 from tkinter import filedialog
 from tkinter import *
 from tkinter import scrolledtext
-from my_const import *
+from tkinter import messagebox
 
-from HelperFunc import resource_path
+from my_const import *
+from HelperFunc import resource_path, checkInputFile
 from ConvertLithoLAS import convert_Litho_LAS
 
 filetypes = (
@@ -35,9 +36,23 @@ def browseFile():
         title='Select a file...',
         filetypes=filetypes,)
     # root.destroy()
-
+    selectedFilePath.set(filename)
     clearFiles()
+    res = checkInputFile(filename)
 
+    if res == 'LITHO':
+        convertLithoBtn.config(state="normal")
+        convertLithoPercentBtn.config(state="disabled")
+    if res == 'LITHO%':
+        convertLithoPercentBtn.config(state="normal")
+        convertLithoBtn.config(state="disabled")
+    if res == '':
+        addText('')
+        convertLithoBtn.config(state="disabled")
+        convertLithoPercentBtn.config(state="disabled")
+        messagebox.showerror('File error', 'Please load valid LAS file')
+        selectedFilePath.set('')
+        return False
     f = open(filename, 'r')
     txt = f.read()
     f.close()
@@ -90,17 +105,26 @@ root = Tk()
 Button(root, text="Browse File", background='#633192', foreground='#faebd7', borderwidth=2, relief="raised", padx=5, pady=5,
        command=browseFile).grid(row=0, column=0, padx=5, pady=5, sticky=W)
 
-Button(root, text="Convert Litho", background='#3c0470', foreground='#faebd7', borderwidth=2, relief="groove", padx=5, pady=5,
-       command=convertLithoToLas).grid(row=0, column=1, padx=5, pady=5, sticky=W)
+convertLithoBtn = Button(root, text="Convert Litho", background='#3c0470', foreground='#faebd7', borderwidth=2, relief="groove", padx=5, pady=5,
+                         command=convertLithoToLas)
+convertLithoBtn.grid(row=0, column=1, padx=5, pady=5, sticky=W)
+convertLithoBtn.config(state="disabled")
 
-Button(root, text="Convert Litho %", background='#3c0470', foreground='#faebd7', borderwidth=2, relief="groove", padx=5, pady=5,
-       command=convertLithoPercentToLas).grid(row=0, column=1, padx=105, pady=5, sticky=W)
+convertLithoPercentBtn = Button(root, text="Convert Litho %", background='#3c0470', foreground='#faebd7', borderwidth=2, relief="groove", padx=5, pady=5,
+                                command=convertLithoPercentToLas)
+convertLithoPercentBtn.grid(row=0, column=1, padx=105, pady=5, sticky=W)
+convertLithoPercentBtn.config(state="disabled")
 
 Button(root, text="Save File", background='#633192', foreground='#faebd7', borderwidth=2, relief="raised", padx=5, pady=5,
        command=saveFile).grid(row=0, column=3, padx=5, pady=5, sticky=W)
 
-group1 = LabelFrame(root, text="Text Box", padx=5, pady=5)
-group1.grid(row=1, column=0, columnspan=4, padx=10, pady=10, sticky=E+W+N+S)
+selectedFilePath = StringVar()
+currentFilePath = Label(
+    root, textvariable=selectedFilePath, background='#633192', foreground='#faebd7', anchor=W)
+currentFilePath.grid(row=1, column=0, columnspan=4, pady=5, padx=5, sticky=E+W)
+
+group1 = LabelFrame(root, text="LAS", padx=5, pady=5)
+group1.grid(row=2, column=0, columnspan=4, padx=10, pady=10, sticky=E+W+N+S)
 
 # Create the textbox
 txtbox = scrolledtext.ScrolledText(group1)
@@ -109,8 +133,8 @@ txtbox.grid(row=0, column=0, columnspan=4, sticky=E+W+N+S)
 root.title('LAS_Handler')
 root.geometry('1100x500')
 root.configure(bg='#000')
-root.grid_columnconfigure(1, weight=1)
-root.grid_rowconfigure(1, weight=1)
+root.grid_columnconfigure(2, weight=1)
+root.grid_rowconfigure(2, weight=1)
 group1.grid_columnconfigure(0, weight=1)
 group1.grid_rowconfigure(0, weight=1)
 # root.resizable(False, False)
