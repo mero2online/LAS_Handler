@@ -2,6 +2,8 @@ from tkinter import filedialog
 from tkinter import *
 from tkinter import scrolledtext
 from tkinter import messagebox
+import os
+import shutil
 
 from my_const import *
 from HelperFunc import resource_path, checkInputFile
@@ -11,6 +13,8 @@ filetypes = (
     ('LAS files', '*.las'),
     ('All files', '*.*'),
 )
+
+resCheckInputFile = ''
 
 
 def convertLithoToLas():
@@ -25,12 +29,16 @@ def convertLithoToLas():
     insertText(text3)
     insertText(res.get('textThreeLas'))
 
+    saveBtn.config(state='normal')
+
 
 def convertLithoPercentToLas():
     res = convert_Litho_LAS('LITHO%')
 
     addText(text4)
     insertText(res.get('textThreeLas'))
+
+    saveBtn.config(state='normal')
 
 
 def browseFile():
@@ -39,44 +47,53 @@ def browseFile():
         title='Select a file...',
         filetypes=filetypes,)
     # root.destroy()
-    selectedFilePath.set(filename)
     clearFiles()
-    res = checkInputFile(filename)
+    if (filename):
+        selectedFilePath.set(filename)
+        global resCheckInputFile
+        resCheckInputFile = checkInputFile(filename)
 
-    if res == 'LITHO':
-        convertLithoBtn.config(state="normal")
-        convertLithoPercentBtn.config(state="disabled")
-    if res == 'LITHO%':
-        convertLithoPercentBtn.config(state="normal")
-        convertLithoBtn.config(state="disabled")
-    if res == '':
+        if resCheckInputFile == 'LITHO':
+            convertLithoBtn.config(state="normal")
+            convertLithoPercentBtn.config(state="disabled")
+        if resCheckInputFile == 'LITHO%':
+            convertLithoPercentBtn.config(state="normal")
+            convertLithoBtn.config(state="disabled")
+        if resCheckInputFile == '':
+            addText('')
+            convertLithoBtn.config(state="disabled")
+            convertLithoPercentBtn.config(state="disabled")
+            messagebox.showerror('File error', 'Please load valid LAS file')
+            selectedFilePath.set('')
+            return False
+        f = open(filename, 'r')
+        txt = f.read()
+        f.close()
+        addText(txt)
+
+        f = open(resource_path('input.las'), 'w')
+        f.write(txt)
+        f.close()
+    else:
         addText('')
         convertLithoBtn.config(state="disabled")
         convertLithoPercentBtn.config(state="disabled")
-        messagebox.showerror('File error', 'Please load valid LAS file')
         selectedFilePath.set('')
-        return False
-    f = open(filename, 'r')
-    txt = f.read()
-    f.close()
-    addText(txt)
-
-    f = open(resource_path('input.las'), 'w')
-    f.write(txt)
-    f.close()
+        saveBtn.config(state='disabled')
 
 
 def saveFile():
     # save-as dialog
-    filename = filedialog.asksaveasfilename(
-        title='Save as...',
-        filetypes=filetypes,
-        defaultextension='.las', initialfile='output'
-    )
+    filename = filedialog.askdirectory()
     allText = getText()
-    f = open(filename, 'w')
+    f = open(f'{filename}/{resCheckInputFile}_OUTPUT.las', 'w')
     f.write(allText)
     f.close()
+    # make a copy of the invoice to work with
+    if resCheckInputFile == 'LITHO%':
+        src = resource_path('draft.xlsx')
+        dst = f'{filename}/{resCheckInputFile}_OUTPUT.xlsx'
+        shutil.copy(src, dst)
     # root.destroy()
 
 
@@ -99,6 +116,8 @@ def clearFiles():
     f.close()
     f = open(resource_path('draft.las'), 'w')
     f.close()
+    if (os.path.exists(resource_path('draft.xlsx'))):
+        os.remove(resource_path('draft.xlsx'))
 
 
 clearFiles()
@@ -118,8 +137,10 @@ convertLithoPercentBtn = Button(root, text="Convert Litho %", background='#3c047
 convertLithoPercentBtn.grid(row=0, column=1, padx=105, pady=5, sticky=W)
 convertLithoPercentBtn.config(state="disabled")
 
-Button(root, text="Save File", background='#633192', foreground='#faebd7', borderwidth=2, relief="raised", padx=5, pady=5,
-       command=saveFile).grid(row=0, column=3, padx=5, pady=5, sticky=W)
+saveBtn = Button(root, text="Save File", background='#633192', foreground='#faebd7', borderwidth=2, relief="raised", padx=5, pady=5,
+                 command=saveFile)
+saveBtn.grid(row=0, column=3, padx=5, pady=5, sticky=W)
+saveBtn.config(state='disabled')
 
 selectedFilePath = StringVar()
 currentFilePath = Label(
