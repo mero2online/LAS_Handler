@@ -14,20 +14,23 @@ filetypes = (
 
 
 def convertLithoToLas():
-    res = convert_Litho_LAS()
+    res = convert_Litho_LAS('LITHO')
 
-    addText(text1())
+    addText(text1)
     insertText(res.get('textOneLas'))
 
-    insertText(text2())
+    insertText(text2)
     insertText(res.get('textTwoLas'))
 
-    insertText(text3())
+    insertText(text3)
     insertText(res.get('textThreeLas'))
 
 
 def convertLithoPercentToLas():
-    print('convertLithoPercentToLas')
+    res = convert_Litho_LAS('LITHO%')
+
+    addText(text4)
+    insertText(res.get('textThreeLas'))
 
 
 def browseFile():

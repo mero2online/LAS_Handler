@@ -1,9 +1,13 @@
 from HandleLithoLAS import gen_litho_LAS
+from HandleLithoPercentLAS import gen_litho_Percent_LAS
 from HelperFunc import resource_path
 
 
-def convert_Litho_LAS():
-    gen_litho_LAS(resource_path('input.las'))
+def convert_Litho_LAS(type):
+    if type == 'LITHO':
+        gen_litho_LAS(resource_path('input.las'))
+    if type == 'LITHO%':
+        gen_litho_Percent_LAS(resource_path('input.las'))
 
     f = open(resource_path('draft.las'), 'r')
     txt = f.read()
@@ -12,9 +16,11 @@ def convert_Litho_LAS():
     startOne = '~Well ------------------------------------------------------'
     endOne = '~Curve Information -----------------------------------------'
     textOneLas = txt[txt.find(startOne)+len(startOne):txt.rfind(endOne)]
+
     startTwo = '~Curve Information -----------------------------------------'
     endTwo = '~Params ----------------------------------------------------'
     textTwoLas = txt[txt.find(startTwo)+len(startTwo):txt.rfind(endTwo)]
+
     startThree = '~ASCII -----------------------------------------------------'
     textThreeLas = txt[txt.find(startThree)+len(startThree):len(txt)-1]
 
