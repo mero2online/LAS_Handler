@@ -29,6 +29,8 @@ def convertLithoToLas():
     insertText(text3)
     insertText(res.get('textThreeLas'))
 
+    writeOutputToFile()
+
     saveBtn.config(state='normal')
 
 
@@ -37,6 +39,8 @@ def convertLithoPercentToLas():
 
     addText(text4)
     insertText(res.get('textThreeLas'))
+
+    writeOutputToFile()
 
     saveBtn.config(state='normal')
 
@@ -85,10 +89,11 @@ def browseFile():
 def saveFile():
     # save-as dialog
     filename = filedialog.askdirectory()
-    allText = getText()
-    f = open(f'{filename}/{resCheckInputFile}_OUTPUT.las', 'w')
-    f.write(allText)
-    f.close()
+
+    srcLAS = resource_path('draft.las')
+    dstLAS = f'{filename}/{resCheckInputFile}_OUTPUT.las'
+    shutil.copy(srcLAS, dstLAS)
+
     # make a copy of the invoice to work with
     if resCheckInputFile == 'LITHO%':
         src = resource_path('draft.xlsx')
@@ -109,6 +114,13 @@ def addText(txt):
 
 def insertText(txt):
     txtbox.insert(INSERT, txt)
+
+
+def writeOutputToFile():
+    allText = getText()
+    f = open(resource_path('draft.las'), 'w')
+    f.write(allText)
+    f.close()
 
 
 def clearFiles():
