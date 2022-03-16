@@ -6,7 +6,7 @@ import os
 import shutil
 
 from my_const import *
-from HelperFunc import resource_path, checkInputFile
+from HelperFunc import resource_path, checkInputFile, readLocalFile, writeLocalFile
 from ConvertLithoLAS import convert_Litho_LAS
 
 filetypes = (
@@ -35,12 +35,10 @@ def convertLithoToLas():
 
 
 def convertLithoPercentToLas():
-    res = convert_Litho_LAS('LITHO%')
+    convert_Litho_LAS('LITHO%')
 
-    addText(text4)
-    insertText(res.get('textThreeLas'))
-
-    writeOutputToFile()
+    txt = readLocalFile(resource_path('draft.las'))
+    addText(txt)
 
     saveBtn.config(state='normal')
 
@@ -70,14 +68,10 @@ def browseFile():
             messagebox.showerror('File error', 'Please load valid LAS file')
             selectedFilePath.set('')
             return False
-        f = open(filename, 'r')
-        txt = f.read()
-        f.close()
-        addText(txt)
 
-        f = open(resource_path('input.las'), 'w')
-        f.write(txt)
-        f.close()
+        txt = readLocalFile(filename)
+        addText(txt)
+        writeLocalFile(resource_path('input.las'), txt)
     else:
         addText('')
         convertLithoBtn.config(state="disabled")
@@ -130,20 +124,15 @@ def insertText(txt):
 
 def writeOutputToFile():
     allText = getText()
-    f = open(resource_path('draft.las'), 'w')
-    f.write(allText)
-    f.close()
+    writeLocalFile(resource_path('draft.las'), allText)
 
 
 def clearFiles():
-    f = open(resource_path('input.las'), 'w')
-    f.close()
-    f = open(resource_path('draft.las'), 'w')
-    f.close()
-    f = open(resource_path('draft_DSG.las'), 'w')
-    f.close()
-    f = open(resource_path('draft_LITHOLOGY.las'), 'w')
-    f.close()
+    writeLocalFile(resource_path('input.las'), '')
+    writeLocalFile(resource_path('draft.las'), '')
+    writeLocalFile(resource_path('draft_DSG.las'), '')
+    writeLocalFile(resource_path('draft_LITHOLOGY.las'), '')
+
     if (os.path.exists(resource_path('draft.xlsx'))):
         os.remove(resource_path('draft.xlsx'))
     if (os.path.exists(resource_path('draft_DSG.xlsx'))):

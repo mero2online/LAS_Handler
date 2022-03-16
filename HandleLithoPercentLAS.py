@@ -2,7 +2,7 @@ import lasio
 import numpy as np
 import openpyxl
 
-from HelperFunc import resource_path
+from HelperFunc import resource_path, readLocalFile, writeLocalFile
 from NewCurvesData import newPerCurves, newPerLithCurves, modPerCurves
 from GetFunc import convertNULL, GET_LITHO_EMPTY
 
@@ -19,15 +19,17 @@ def gen_litho_Percent_LAS(filename):
         las.delete_curve(x)
         las.append_curve(newPerCurves[idx], res, descr=newPerCurves[idx])
 
-    las.write(resource_path('draft.las'), fmt='%.0f', len_numeric_field=5)
-    las.to_excel(resource_path('draft.xlsx'))
-    workbook = openpyxl.load_workbook(resource_path('draft.xlsx'))
-    std = workbook.get_sheet_by_name('Header')
-    workbook.remove_sheet(std)
-    workbook.save(resource_path('draft.xlsx'))
+    firstRow = ' '.join(las.keys())
+    lasFilename = resource_path('draft.las')
+    excelFilename = resource_path('draft.xlsx')
+
+    las.write(lasFilename, fmt='%.0f', len_numeric_field=5)
+    las.to_excel(excelFilename)
 
     DSG()
     LITHOLOGY()
+
+    trimLASandEXCEL(lasFilename, excelFilename, firstRow)
 
 #
 # DSG
@@ -46,25 +48,13 @@ def DSG():
         if (idx == 9 or idx == 10 or idx == 16 or idx == 25):
             las.delete_curve(x)
 
-    las.write(resource_path('draft_DSG.las'), fmt='%.0f', len_numeric_field=5)
-    las.to_excel(resource_path('draft_DSG.xlsx'))
-    workbook = openpyxl.load_workbook(resource_path('draft_DSG.xlsx'))
-    std = workbook.get_sheet_by_name('Header')
-    workbook.remove_sheet(std)
-    workbook.save(resource_path('draft_DSG.xlsx'))
-
-    f = open(resource_path('draft_DSG.las'), 'r')
-    txt = f.read()
-    f.close()
-
+    lasFilename = resource_path('draft_DSG.las')
+    excelFilename = resource_path('draft_DSG.xlsx')
     firstRow = ' '.join(las.keys())
-    startThree = '~ASCII -----------------------------------------------------'
-    data_DSG = txt[txt.find(startThree)+len(startThree):len(txt)-1]
-    finalData = f'{firstRow}{data_DSG}'
 
-    f = open(resource_path('draft_DSG.las'), 'w')
-    f.write(finalData)
-    f.close()
+    las.write(lasFilename, fmt='%.0f', len_numeric_field=5)
+    las.to_excel(excelFilename)
+    trimLASandEXCEL(lasFilename, excelFilename, firstRow)
 
 #
 # LITHOLOGY
@@ -82,22 +72,25 @@ def LITHOLOGY():
         else:
             newLas.add_curve(x, GET_LITHO_EMPTY(las['DEPTH']), unit='%')
 
-    newLas.write(resource_path('draft_LITHOLOGY.las'), fmt='%.0f', len_numeric_field=5)
-    newLas.to_excel(resource_path('draft_LITHOLOGY.xlsx'))
-    workbook = openpyxl.load_workbook(resource_path('draft_LITHOLOGY.xlsx'))
+    lasFilename = resource_path('draft_LITHOLOGY.las')
+    excelFilename = resource_path('draft_LITHOLOGY.xlsx')
+    firstRow = ' '.join(newLas.keys())
+
+    newLas.write(lasFilename, fmt='%.0f', len_numeric_field=5)
+    newLas.to_excel(excelFilename)
+    trimLASandEXCEL(lasFilename, excelFilename, firstRow)
+
+
+def trimLASandEXCEL(lasFilename, excelFilename, firstRow):
+    workbook = openpyxl.load_workbook(excelFilename)
     std = workbook.get_sheet_by_name('Header')
     workbook.remove_sheet(std)
-    workbook.save(resource_path('draft_LITHOLOGY.xlsx'))
+    workbook.save(excelFilename)
 
-    f = open(resource_path('draft_LITHOLOGY.las'), 'r')
-    txt = f.read()
-    f.close()
+    txt = readLocalFile(lasFilename)
 
-    firstRow = ' '.join(newLas.keys())
-    startThree = '~ASCII -----------------------------------------------------'
-    data_LITHOLOGY = txt[txt.find(startThree)+len(startThree):len(txt)-1]
-    finalData = f'{firstRow}{data_LITHOLOGY}'
+    start = '~ASCII -----------------------------------------------------'
+    data = txt[txt.find(start)+len(start):len(txt)-1]
+    finalData = f'{firstRow}{data}'
 
-    f = open(resource_path('draft_LITHOLOGY.las'), 'w')
-    f.write(finalData)
-    f.close()
+    writeLocalFile(lasFilename, finalData)
