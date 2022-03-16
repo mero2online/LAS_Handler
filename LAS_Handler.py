@@ -105,6 +105,12 @@ def saveFile():
         src = resource_path('draft_DSG.las')
         dst = f'{filename}/{resCheckInputFile}_DSG_OUTPUT.las'
         shutil.copy(src, dst)
+        src = resource_path('draft_LITHOLOGY.las')
+        dst = f'{filename}/{resCheckInputFile}_LITHOLOGY_OUTPUT.las'
+        shutil.copy(src, dst)
+        src = resource_path('draft_LITHOLOGY.xlsx')
+        dst = f'{filename}/{resCheckInputFile}_LITHOLOGY_OUTPUT.xlsx'
+        shutil.copy(src, dst)
     # root.destroy()
 
 
@@ -136,10 +142,14 @@ def clearFiles():
     f.close()
     f = open(resource_path('draft_DSG.las'), 'w')
     f.close()
+    f = open(resource_path('draft_LITHOLOGY.las'), 'w')
+    f.close()
     if (os.path.exists(resource_path('draft.xlsx'))):
         os.remove(resource_path('draft.xlsx'))
     if (os.path.exists(resource_path('draft_DSG.xlsx'))):
         os.remove(resource_path('draft_DSG.xlsx'))
+    if (os.path.exists(resource_path('draft_LITHOLOGY.xlsx'))):
+        os.remove(resource_path('draft_LITHOLOGY.xlsx'))
 
 
 clearFiles()

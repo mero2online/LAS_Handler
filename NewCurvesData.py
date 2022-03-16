@@ -2,6 +2,15 @@ newPerCurves = ['DEPTH', 'HAL', 'ANHY', 'GYP', 'DOL', 'CALDOL', 'ARGDOL', 'SNDDO
                 'CAL', 'CALLS', 'DOLLS', 'LS', 'ARGLS', 'SNDLS', 'MARL', 'CLAY', 'SH', 'SNDSH',
                 'SST', 'SAND', 'CONG', 'CHERT', 'COAL', 'IGN', 'MET', 'UNK', 'CEMENT']
 
+modPerCurves = ['ANHY', 'ARGDOL', 'ARGLS', 'CALDOL', 'CALLS', 'CEMENT', 'CHERT', 'CLAY', 'COAL',
+                'CONG', 'DOL', 'DOLLS', 'GYP', 'HAL', 'IGN', 'LS', 'MARL', 'SAND', 'SH', 'SST']
+
+newPerLithCurves = ['VOLCUT_ANHY', 'VOLCUT_ARGDOL', 'VOLCUT_ARGLS', 'VOLCUT_CALDOL',
+                    'VOLCUT_CALLS', 'VOLCUT_CEMENT', 'VOLCUT_CHERT', 'VOLCUT_CLAY', 'VOLCUT_COAL',
+                    'VOLCUT_CONG', 'VOLCUT_DOL', 'VOLCUT_DOLLST', 'VOLCUT_GYP', 'VOLCUT_HAL', 'VOLCUT_IGN',
+                    'VOLCUT_LST', 'VOLCUT_MARL', 'VOLCUT_SAND', 'VOLCUT_SH', 'VOLCUT_SLST', 'CALC_M',
+                    'DOLO_M', 'DIR_FLUO', 'CUT_FLUO']
+
 newLithoCurves = [
     {
         "name": "VOLCUT_ANHY",
