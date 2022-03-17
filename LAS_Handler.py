@@ -5,7 +5,6 @@ from tkinter import messagebox
 import os
 import shutil
 
-from my_const import *
 from HelperFunc import resource_path, checkInputFile, readLocalFile, writeLocalFile
 from ConvertLithoLAS import convert_Litho_LAS
 
@@ -20,16 +19,8 @@ resCheckInputFile = ''
 def convertLithoToLas():
     res = convert_Litho_LAS('LITHO')
 
-    addText(text1)
-    insertText(res.get('textOneLas'))
-
-    insertText(text2)
-    insertText(res.get('textTwoLas'))
-
-    insertText(text3)
-    insertText(res.get('textThreeLas'))
-
-    writeOutputToFile()
+    txt = readLocalFile(resource_path('draft.las'))
+    addText(txt)
 
     saveBtn.config(state='normal')
 
@@ -84,27 +75,32 @@ def saveFile():
     # save-as dialog
     filename = filedialog.askdirectory()
 
-    srcLAS = resource_path('draft.las')
-    dstLAS = f'{filename}/{resCheckInputFile}_OUTPUT.las'
-    shutil.copy(srcLAS, dstLAS)
+    src_files = os.listdir(resource_path('out\\'))
+    for file_name in src_files:
+        if os.path.isfile(resource_path(f'out\\{file_name}')):
+            shutil.copy(resource_path(f'out\\{file_name}'), filename)
 
-    # make a copy of the invoice to work with
-    if resCheckInputFile == 'LITHO%':
-        src = resource_path('draft.xlsx')
-        dst = f'{filename}/{resCheckInputFile}_OUTPUT.xlsx'
-        shutil.copy(src, dst)
-        src = resource_path('draft_DSG.xlsx')
-        dst = f'{filename}/{resCheckInputFile}_DSG_OUTPUT.xlsx'
-        shutil.copy(src, dst)
-        src = resource_path('draft_DSG.las')
-        dst = f'{filename}/{resCheckInputFile}_DSG_OUTPUT.las'
-        shutil.copy(src, dst)
-        src = resource_path('draft_LITHOLOGY.las')
-        dst = f'{filename}/{resCheckInputFile}_LITHOLOGY_OUTPUT.las'
-        shutil.copy(src, dst)
-        src = resource_path('draft_LITHOLOGY.xlsx')
-        dst = f'{filename}/{resCheckInputFile}_LITHOLOGY_OUTPUT.xlsx'
-        shutil.copy(src, dst)
+    # srcLAS = resource_path('draft.las')
+    # dstLAS = f'{filename}/{resCheckInputFile}_OUTPUT.las'
+    # shutil.copy(srcLAS, dstLAS)
+
+    # # make a copy of the invoice to work with
+    # if resCheckInputFile == 'LITHO%':
+    #     src = resource_path('draft.xlsx')
+    #     dst = f'{filename}/{resCheckInputFile}_OUTPUT.xlsx'
+    #     shutil.copy(src, dst)
+    #     src = resource_path('draft_DSG.xlsx')
+    #     dst = f'{filename}/{resCheckInputFile}_DSG_OUTPUT.xlsx'
+    #     shutil.copy(src, dst)
+    #     src = resource_path('draft_DSG.las')
+    #     dst = f'{filename}/{resCheckInputFile}_DSG_OUTPUT.las'
+    #     shutil.copy(src, dst)
+    #     src = resource_path('draft_LITHOLOGY.las')
+    #     dst = f'{filename}/{resCheckInputFile}_LITHOLOGY_OUTPUT.las'
+    #     shutil.copy(src, dst)
+    #     src = resource_path('draft_LITHOLOGY.xlsx')
+    #     dst = f'{filename}/{resCheckInputFile}_LITHOLOGY_OUTPUT.xlsx'
+    #     shutil.copy(src, dst)
     # root.destroy()
 
 
@@ -122,17 +118,14 @@ def insertText(txt):
     txtbox.insert(INSERT, txt)
 
 
-def writeOutputToFile():
-    allText = getText()
-    writeLocalFile(resource_path('draft.las'), allText)
-
-
 def clearFiles():
     writeLocalFile(resource_path('input.las'), '')
     writeLocalFile(resource_path('draft.las'), '')
     writeLocalFile(resource_path('draft_DSG.las'), '')
     writeLocalFile(resource_path('draft_LITHOLOGY.las'), '')
-
+    if (os.path.exists(resource_path('out'))):
+        shutil.rmtree(resource_path('out\\'))
+    os.mkdir(resource_path('out'))
     if (os.path.exists(resource_path('draft.xlsx'))):
         os.remove(resource_path('draft.xlsx'))
     if (os.path.exists(resource_path('draft_DSG.xlsx'))):

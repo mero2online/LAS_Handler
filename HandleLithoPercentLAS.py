@@ -1,7 +1,10 @@
 import lasio
 import numpy as np
+import datetime
 import openpyxl
+from openpyxl import Workbook
 
+from my_const import *
 from HelperFunc import resource_path, readLocalFile, writeLocalFile
 from NewCurvesData import newPerCurves, newPerLithCurves, modPerCurves
 from GetFunc import convertNULL, GET_LITHO_EMPTY
@@ -9,6 +12,19 @@ from GetFunc import convertNULL, GET_LITHO_EMPTY
 
 def gen_litho_Percent_LAS(filename):
     las = lasio.read(filename)
+
+    wellNameOriginal = las.well.WELL.value
+    finalWellName = wellNameOriginal[wellNameOriginal.find(
+        '(')+len('('):wellNameOriginal.rfind(')')]
+    las.well.WELL = finalWellName
+
+    day = datetime.datetime.now().strftime("%d")
+    month = datetime.datetime.now().strftime("%b").upper()
+    year = datetime.datetime.now().strftime("%Y")
+    finalWellDate = f'{day}_{month}_{year}'
+    las.well.DATE = finalWellDate
+
+    las.well.SRVC = 'EXLOG'
 
     for idx, x in enumerate(las.keys()):
         if (idx == 21 or idx == 29 or idx == 30 or idx == 31 or idx == 32 or idx == 33):
@@ -64,13 +80,15 @@ def DSG():
 def LITHOLOGY():
     las = lasio.read(resource_path('draft.las'))
     newLas = lasio.LASFile()
-    newLas.add_curve('DEPTH', las['DEPTH'], unit='ft')
+    newLas.add_curve('DEPTH', las['DEPTH'], unit='ft', descr='1 Hole Depth')
 
     for idx, x in enumerate(newPerLithCurves):
         if idx <= 19:
-            newLas.add_curve(x, las[modPerCurves[idx]], unit='%')
+            newLas.add_curve(newPerLithCurves[idx]['name'], las[modPerCurves[idx]],
+                             unit='%', descr=newPerLithCurves[idx]['desc'])
         else:
-            newLas.add_curve(x, GET_LITHO_EMPTY(las['DEPTH']), unit='%')
+            newLas.add_curve(newPerLithCurves[idx]['name'], GET_LITHO_EMPTY(
+                las['DEPTH']), unit='%', descr=newPerLithCurves[idx]['desc'])
 
     lasFilename = resource_path('draft_LITHOLOGY.las')
     excelFilename = resource_path('draft_LITHOLOGY.xlsx')
@@ -78,7 +96,44 @@ def LITHOLOGY():
 
     newLas.write(lasFilename, fmt='%.0f', len_numeric_field=5)
     newLas.to_excel(excelFilename)
+
+    txt = readLocalFile(resource_path('draft.las'))
+    startOne = '~Well ------------------------------------------------------'
+    endOne = '~Curve Information -----------------------------------------'
+    textOneLas = txt[txt.find(startOne)+len(startOne):txt.rfind(endOne)]
+    lith = readLocalFile(resource_path('draft_LITHOLOGY.las'))
+    startTwo = '~Curve Information -----------------------------------------'
+    endTwo = '~Params ----------------------------------------------------'
+    textTwoLas = lith[lith.find(startTwo)+len(startTwo):lith.rfind(endTwo)]
+    startThree = '~ASCII -----------------------------------------------------'
+    textThreeLas = lith[lith.find(startThree)+len(startThree):len(lith)-1]
+    finalData = f'{text1}{textOneLas}{text4}{textTwoLas}{text5}{textThreeLas}'
+
+    finalFileName = f'{las.well.WELL.value}_LITHOLOGY_{las.well.DATE.value}'
+    writeLocalFile(resource_path(f'out\\{finalFileName}.las'), finalData)
+
+    wb = Workbook()
+    ws1 = wb.active
+    data = finalData.splitlines()
+    for idx, row in enumerate(data):
+        if idx <= 55:
+            ws1.append([row])
+        elif idx == 56:
+            one = row.split()
+            two = one[2:len(one)]
+            two.insert(0, ' '.join([one[0], one[1]]))
+            ws1.append(two)
+        else:
+            ws1.append([int(x) for x in row.split()])
+    
+    wb.save(resource_path(f'out\\{finalFileName}.xlsx'))
+
     trimLASandEXCEL(lasFilename, excelFilename, firstRow)
+
+
+# ########
+# Helper #
+# ########
 
 
 def trimLASandEXCEL(lasFilename, excelFilename, firstRow):
