@@ -3,11 +3,13 @@ import numpy as np
 import datetime
 import openpyxl
 from openpyxl import Workbook
+from pandas import DataFrame
+from openpyxl.utils.dataframe import dataframe_to_rows
 
 from my_const import *
 from HelperFunc import resource_path, readLocalFile, writeLocalFile
 from NewCurvesData import newPerCurves, newPerLithCurves, modPerCurves
-from GetFunc import convertNULL, GET_LITHO_EMPTY
+from GetFunc import convertNULL, GET_LITHO_EMPTY, Get_DSG_Formula
 
 
 def gen_litho_Percent_LAS(filename):
@@ -59,6 +61,10 @@ def DSG():
             data = [0]*len(las[x])
             las.delete_curve(x)
             las.insert_curve(17, x, data)
+        elif (idx == 27):
+            data = las[x]
+            las.delete_curve(x)
+            las.insert_curve(26, x, data)
 
     for idx, x in enumerate(las.keys()):
         if (idx == 9 or idx == 10 or idx == 16 or idx == 25):
@@ -66,11 +72,48 @@ def DSG():
 
     lasFilename = resource_path('draft_DSG.las')
     excelFilename = resource_path('draft_DSG.xlsx')
-    firstRow = ' '.join(las.keys())
 
-    las.write(lasFilename, fmt='%.0f', len_numeric_field=5)
     las.to_excel(excelFilename)
+
+    for idx, x in enumerate(las.keys()):
+        if (idx > 1):
+            data = las[x]+las[las.keys()[idx-1]]
+            las.delete_curve(x)
+            las.insert_curve(idx, x, data)
+
+    las.insert_curve(1, 'Depth.org', las['DEPTH'])
+    las.write(lasFilename, fmt='%.0f', len_numeric_field=5)
+    firstRow = ' '.join(las.keys())
     trimLASandEXCEL(lasFilename, excelFilename, firstRow)
+
+    workbook = openpyxl.load_workbook(excelFilename)
+    workbook.create_sheet(title="LITHOLOGY-DSG")
+    ws = workbook['Curves']
+    ws.title = 'original values'
+    ws1 = workbook['original values']
+    ws2 = workbook['LITHOLOGY-DSG']
+    df = DataFrame(ws1.values)
+    rows = dataframe_to_rows(df, index=False, header=False)
+    for r_idx, row in enumerate(rows, 1):
+        for c_idx, value in enumerate(row, 1):
+            values = Get_DSG_Formula(r_idx)
+            ws2.cell(row=r_idx, column=c_idx,
+                     value=value if r_idx == 1 else values[c_idx-1])
+
+    ws2.insert_cols(2, 1)
+    for x in range(len(ws1['A'])):
+        i = x+1
+        if x == 0:
+            ws2[f'B{i}'] = 'Depth.org'
+        else:
+            ws2[f'B{i}'] = f'=A{i}'
+
+    finalFileName = f'{las.well.WELL.value}_LITHOLOGY-DSG_{las.well.DATE.value}'
+    # workbook.save(excelFilename)
+    workbook.save(resource_path(f'out\\{finalFileName}.xlsx'))
+
+    finalData = readLocalFile(lasFilename)
+    writeLocalFile(resource_path(f'out\\{finalFileName}.las'), finalData)
 
 #
 # LITHOLOGY
@@ -125,7 +168,7 @@ def LITHOLOGY():
             ws1.append(two)
         else:
             ws1.append([int(x) for x in row.split()])
-    
+
     wb.save(resource_path(f'out\\{finalFileName}.xlsx'))
 
     trimLASandEXCEL(lasFilename, excelFilename, firstRow)

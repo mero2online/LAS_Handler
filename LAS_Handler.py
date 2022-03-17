@@ -80,6 +80,8 @@ def saveFile():
         if os.path.isfile(resource_path(f'out\\{file_name}')):
             shutil.copy(resource_path(f'out\\{file_name}'), filename)
 
+    messagebox.showinfo('Success', f'Files saved successfully to\n{filename}')
+
     # srcLAS = resource_path('draft.las')
     # dstLAS = f'{filename}/{resCheckInputFile}_OUTPUT.las'
     # shutil.copy(srcLAS, dstLAS)
