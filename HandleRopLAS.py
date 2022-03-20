@@ -78,22 +78,13 @@ def gen_ROP_LAS(filename):
     borderPosition = Border(
         left=borderStyle, right=borderStyle, top=borderStyle, bottom=borderStyle)
 
-    ws1['A1'].font = topCellFont
-    ws1['B1'].font = topCellFont
-
     cellAlignment = Alignment(horizontal='center', vertical='center')
-    ws1['A1'].alignment = cellAlignment
-    ws1['B1'].alignment = cellAlignment
-
-    ws1['A1'].border = borderPosition
-    ws1['B1'].border = borderPosition
 
     for col in columnToStyle:
         for idx, cell in enumerate(ws1[col]):
-            if idx > 0:
-                cell.font = cellFont
-                cell.border = borderPosition
-                cell.alignment = cellAlignment
+            cell.font = topCellFont if idx == 0 else cellFont
+            cell.border = borderPosition
+            cell.alignment = cellAlignment
 
     ws1.freeze_panes = ws1['A2']
 
