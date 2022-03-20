@@ -53,3 +53,31 @@ def Get_DSG_Formula(r_idx):
             f"='original values'!V{r_idx}+V{r_idx}",
             f"='original values'!W{r_idx}+W{r_idx}",
             f"='original values'!X{r_idx}+X{r_idx}"]
+
+
+def aggregate_DEPTH_FiveFeet(arr):
+    alterArr = []
+    chunks = [arr[i:i + 5] for i in range(0, len(arr), 5)]
+    for x in chunks:
+        if len(x) == 5:
+            alterArr.append(x[4])
+
+    return alterArr
+
+
+def aggregate_ROP_FiveFeet(arr):
+    alterArr = []
+
+    for x in range(len(arr)):
+        if arr[x] > 0:
+            arr[x] = 60/arr[x]
+        else:
+            arr[x] = 0
+
+    chunks = [arr[i:i + 5] for i in range(0, len(arr), 5)]
+
+    for x in chunks:
+        if len(x) == 5:
+            alterArr.append(round(sum(x)))
+
+    return alterArr

@@ -34,6 +34,15 @@ def convertLithoPercentToLas():
     saveBtn.config(state='normal')
 
 
+def convertROPToLas():
+    convert_Litho_LAS('ROP')
+
+    txt = readLocalFile(resource_path('draft.las'))
+    addText(txt)
+
+    saveBtn.config(state='normal')
+
+
 def browseFile():
     # open-file dialog
     filename = filedialog.askopenfilename(
@@ -49,13 +58,20 @@ def browseFile():
         if resCheckInputFile == 'LITHO':
             convertLithoBtn.config(state="normal")
             convertLithoPercentBtn.config(state="disabled")
+            convertROPBtn.config(state="disabled")
         if resCheckInputFile == 'LITHO%':
             convertLithoPercentBtn.config(state="normal")
+            convertLithoBtn.config(state="disabled")
+            convertROPBtn.config(state="disabled")
+        if resCheckInputFile == 'ROP':
+            convertROPBtn.config(state="normal")
+            convertLithoPercentBtn.config(state="disabled")
             convertLithoBtn.config(state="disabled")
         if resCheckInputFile == '':
             addText('')
             convertLithoBtn.config(state="disabled")
             convertLithoPercentBtn.config(state="disabled")
+            convertROPBtn.config(state="disabled")
             messagebox.showerror('File error', 'Please load valid LAS file')
             selectedFilePath.set('')
             return False
@@ -67,6 +83,7 @@ def browseFile():
         addText('')
         convertLithoBtn.config(state="disabled")
         convertLithoPercentBtn.config(state="disabled")
+        convertROPBtn.config(state="disabled")
         selectedFilePath.set('')
         saveBtn.config(state='disabled')
 
@@ -125,6 +142,7 @@ def clearFiles():
     writeLocalFile(resource_path('draft.las'), '')
     writeLocalFile(resource_path('draft_DSG.las'), '')
     writeLocalFile(resource_path('draft_LITHOLOGY.las'), '')
+    writeLocalFile(resource_path('draft.txt'), '')
     if (os.path.exists(resource_path('out'))):
         shutil.rmtree(resource_path('out\\'))
     os.mkdir(resource_path('out'))
@@ -152,6 +170,11 @@ convertLithoPercentBtn = Button(root, text="Convert Litho %", background='#3c047
                                 command=convertLithoPercentToLas)
 convertLithoPercentBtn.grid(row=0, column=1, padx=105, pady=5, sticky=W)
 convertLithoPercentBtn.config(state="disabled")
+
+convertROPBtn = Button(root, text="Convert ROP", background='#3c0470', foreground='#faebd7', borderwidth=2, relief="groove", padx=5, pady=5,
+                       command=convertROPToLas)
+convertROPBtn.grid(row=0, column=1, padx=220, pady=5, sticky=W)
+convertROPBtn.config(state="disabled")
 
 saveBtn = Button(root, text="Save File", background='#633192', foreground='#faebd7', borderwidth=2, relief="raised", padx=5, pady=5,
                  command=saveFile)
