@@ -1,5 +1,4 @@
 import lasio
-import numpy as np
 import datetime
 import openpyxl
 from openpyxl import Workbook
@@ -40,9 +39,14 @@ def gen_litho_Percent_LAS(filename):
     firstRow = ' '.join(las.keys())
     lasFilename = resource_path('draft.las')
     excelFilename = resource_path('draft.xlsx')
+    csvFilename = resource_path('draft.txt')
 
     las.write(lasFilename, fmt='%.0f', len_numeric_field=5)
     las.to_excel(excelFilename)
+    las.to_csv(csvFilename, units=False, delimiter='\t')
+    csvDraft = readLocalFile(csvFilename)
+    csvDraftWitoutDecimal= csvDraft.replace('.0', '')
+    writeLocalFile(resource_path(f'out\\DSG_FOR_GRAVITAS_CONVERTER.txt'), csvDraftWitoutDecimal)
 
     DSG()
     LITHOLOGY()
