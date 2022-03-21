@@ -54,6 +54,14 @@ def gen_litho_Percent_LAS(filename):
 
     trimLASandEXCEL(lasFilename, excelFilename, firstRow)
 
+    LITHOLOGY_GRAVITAS_Converted(lasFilename, finalWellName, finalWellDate)
+
+#
+# LITHOLOGY_GRAVITAS_Converted
+#
+
+
+def LITHOLOGY_GRAVITAS_Converted(lasFilename, finalWellName, finalWellDate):
     lasDraft = readLocalFile(lasFilename)
     lasDraftSplitted = lasDraft.splitlines()
 
@@ -92,7 +100,7 @@ def gen_litho_Percent_LAS(filename):
 
     result.insert(0, ['TOP', 'BASE', 'LEFT', 'RIGHT', 'LITHOTYPE'])
 
-    finalFileName = f'{las.well.WELL.value}_LITHOLOGY_GRAVITAS_{las.well.DATE.value}_Converted'
+    finalFileName = f'{finalWellName}_LITHOLOGY_GRAVITAS_{finalWellDate}_Converted'
     wb = Workbook()
     ws1 = wb.active
 
@@ -103,10 +111,9 @@ def gen_litho_Percent_LAS(filename):
     df = DataFrame(ws1.values)
     df.to_csv(resource_path(f'out\\{finalFileName}.txt'),
               index=False, header=False, sep='\t')
-
-#
-# DSG
-#
+    #
+    # DSG
+    #
 
 
 def DSG():
