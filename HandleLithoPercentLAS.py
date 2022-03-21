@@ -45,13 +45,63 @@ def gen_litho_Percent_LAS(filename):
     las.to_excel(excelFilename)
     las.to_csv(csvFilename, units=False, delimiter='\t')
     csvDraft = readLocalFile(csvFilename)
-    csvDraftWitoutDecimal= csvDraft.replace('.0', '')
-    writeLocalFile(resource_path(f'out\\DSG_FOR_GRAVITAS_CONVERTER.txt'), csvDraftWitoutDecimal)
+    csvDraftWitoutDecimal = csvDraft.replace('.0', '')
+    writeLocalFile(resource_path(
+        f'out\\DSG_FOR_GRAVITAS_CONVERTER.txt'), csvDraftWitoutDecimal)
 
     DSG()
     LITHOLOGY()
 
     trimLASandEXCEL(lasFilename, excelFilename, firstRow)
+
+    lasDraft = readLocalFile(lasFilename)
+    lasDraftSplitted = lasDraft.splitlines()
+
+    filtered = []
+    filtered.append([int(i) for i in lasDraftSplitted[1].split()])
+    for idx, x in enumerate(lasDraftSplitted):
+        lastFiltered = filtered[len(filtered)-1]
+        if idx > 0:
+            x = [int(i) for i in x.split()]
+            if x[1:len(x)-1] != lastFiltered[1:len(lastFiltered)-1]:
+                filtered.append(x)
+            else:
+                filtered.pop()
+                filtered.append(x)
+
+    filtered.insert(0, [lasDraftSplitted[0].split()])
+
+    result = []
+    for idx, row in enumerate(filtered):
+        if (idx == 0):
+            headerRow = row[0]
+            # headerRow[1:len(headerRow)] = headerRow[len(headerRow)-1:0:-1]
+        else:
+            matched = []
+            # row[1:len(row)] = row[len(row)-1:0:-1]
+            for id, val in enumerate(row):
+                if id > 0:
+                    if val > 0:
+                        matched.append(val)
+                        top = getTop(result, row)
+                        base = row[0]
+                        right = val if len(matched) <= 1 else sum(matched)
+                        left = right - val
+                        result.append([top, base, left, right, headerRow[id]])
+
+    result.insert(0, ['TOP', 'BASE', 'LEFT', 'RIGHT', 'LITHOTYPE'])
+
+    finalFileName = f'{las.well.WELL.value}_LITHOLOGY_GRAVITAS_{las.well.DATE.value}_Converted'
+    wb = Workbook()
+    ws1 = wb.active
+
+    for row in result:
+        ws1.append(row)
+    wb.save(resource_path(f'out\\{finalFileName}.xlsx'))
+
+    df = DataFrame(ws1.values)
+    df.to_csv(resource_path(f'out\\{finalFileName}.txt'),
+              index=False, header=False, sep='\t')
 
 #
 # DSG
@@ -196,3 +246,12 @@ def trimLASandEXCEL(lasFilename, excelFilename, firstRow):
     finalData = f'{firstRow}{data}'
 
     writeLocalFile(lasFilename, finalData)
+
+
+def getTop(result, row):
+    if (len(result) > 0 and ((row[0] - result[len(result)-1][1]) > 10)):
+        return result[len(result)-1][1]
+    elif (len(result) > 0 and result[len(result)-1][1]-result[len(result)-1][0] > 10) and row[0] == result[len(result)-1][1]:
+        return result[len(result)-1][0]
+    else:
+        return row[0] - 10
