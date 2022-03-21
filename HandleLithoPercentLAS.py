@@ -57,8 +57,9 @@ def gen_litho_Percent_LAS(filename):
     lasDraft = readLocalFile(lasFilename)
     lasDraftSplitted = lasDraft.splitlines()
 
+    firstNumRow = [int(i) for i in lasDraftSplitted[1].split()]
     filtered = []
-    filtered.append([int(i) for i in lasDraftSplitted[1].split()])
+    filtered.append(firstNumRow)
     for idx, x in enumerate(lasDraftSplitted):
         lastFiltered = filtered[len(filtered)-1]
         if idx > 0:
@@ -83,7 +84,7 @@ def gen_litho_Percent_LAS(filename):
                 if id > 0:
                     if val > 0:
                         matched.append(val)
-                        top = getTop(result, row)
+                        top = getTop(result, row, idx, firstNumRow)
                         base = row[0]
                         right = val if len(matched) <= 1 else sum(matched)
                         left = right - val
@@ -248,7 +249,9 @@ def trimLASandEXCEL(lasFilename, excelFilename, firstRow):
     writeLocalFile(lasFilename, finalData)
 
 
-def getTop(result, row):
+def getTop(result, row, idx, firstNumRow):
+    if idx == 1:
+        return firstNumRow[0]-10
     if (len(result) > 0 and ((row[0] - result[len(result)-1][1]) > 10)):
         return result[len(result)-1][1]
     elif (len(result) > 0 and result[len(result)-1][1]-result[len(result)-1][0] > 10) and row[0] == result[len(result)-1][1]:
