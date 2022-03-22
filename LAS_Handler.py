@@ -216,45 +216,46 @@ def limitSizeDepth(*args):
 
 root = Tk()
 
-Button(root, text="Browse File", background='#633192', foreground='#faebd7', borderwidth=2, relief="raised", padx=5, pady=5,
-       command=browseFile).grid(row=0, column=0, padx=5, pady=5, sticky=W)
+browseBtn = Button(root, text="Browse File", background='#633192', foreground='#faebd7', borderwidth=2, relief="raised", padx=5, pady=5,
+                   command=browseFile)
+browseBtn.place(x=5, y=5, width=100, height=37)
+
+convertROPBtn = Button(root, text="Convert ROP", background='#3c0470', foreground='#faebd7', borderwidth=2, relief="groove", padx=5, pady=5,
+                       command=convertROPToLas)
+convertROPBtn.place(x=110, y=5, width=100, height=35)
+convertROPBtn.config(state="disabled")
 
 convertLithoBtn = Button(root, text="Convert Litho", background='#3c0470', foreground='#faebd7', borderwidth=2, relief="groove", padx=5, pady=5,
                          command=convertLithoToLas)
-convertLithoBtn.grid(row=0, column=1, padx=5, pady=5, sticky=W)
+convertLithoBtn.place(x=215, y=5, width=100, height=35)
 convertLithoBtn.config(state="disabled")
 
 convertLithoPercentBtn = Button(root, text="Convert Litho %", background='#3c0470', foreground='#faebd7', borderwidth=2, relief="groove", padx=5, pady=5,
                                 command=convertLithoPercentToLas)
-convertLithoPercentBtn.grid(row=0, column=1, padx=105, pady=5, sticky=W)
+convertLithoPercentBtn.place(x=320, y=5, width=100, height=35)
 convertLithoPercentBtn.config(state="disabled")
-
-convertROPBtn = Button(root, text="Convert ROP", background='#3c0470', foreground='#faebd7', borderwidth=2, relief="groove", padx=5, pady=5,
-                       command=convertROPToLas)
-convertROPBtn.grid(row=0, column=1, padx=220, pady=5, sticky=W)
-convertROPBtn.config(state="disabled")
-
-saveBtn = Button(root, text="Save File", background='#633192', foreground='#faebd7', borderwidth=2, relief="raised", padx=5, pady=5,
-                 command=saveFile)
-saveBtn.grid(row=0, column=3, padx=5, pady=5, sticky=W)
-saveBtn.config(state='disabled')
 
 converted_checked = IntVar()
 convertedCheckBtn = Checkbutton(root, text="Converted", variable=converted_checked,
                                 background='#633192', pady=20, padx=20, borderwidth=2, relief="ridge", command=change_check_value)
-convertedCheckBtn.place(x=410, y=5, width=100, height=35)
+convertedCheckBtn.place(x=430, y=5, width=100, height=35)
 convertedCheckBtn.config(state="disabled")
 
 start_depth_label = Label(root, text='Start Depth',
                           background='#633192', foreground='#faebd7')
-start_depth_label.place(x=515, y=5, width=66, height=35)
+start_depth_label.place(x=535, y=5, width=66, height=35)
 
 start_depth = StringVar()
 start_depth.trace('w', limitSizeDepth)
 start_depth_entry = Entry(root, textvariable=start_depth,
                           background='#fff', borderwidth=2, relief="ridge", font=('Arial', 12, 'bold'))
-start_depth_entry.place(x=590, y=5, width=55, height=35)
+start_depth_entry.place(x=610, y=5, width=55, height=35)
 start_depth_entry.config(state="disabled")
+
+saveBtn = Button(root, text="Save File", background='#633192', foreground='#faebd7', borderwidth=2, relief="raised", padx=5, pady=5,
+                 command=saveFile)
+saveBtn.grid(row=0, column=3, padx=5, pady=5, sticky=W)
+saveBtn.config(state='disabled')
 
 selectedFilePath = StringVar()
 currentFilePath = Label(
