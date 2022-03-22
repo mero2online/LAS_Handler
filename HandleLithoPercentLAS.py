@@ -11,7 +11,7 @@ from NewCurvesData import newPerCurves, newPerLithCurves, modPerCurves
 from GetFunc import convertNULL, GET_LITHO_EMPTY, Get_DSG_Formula
 
 
-def gen_litho_Percent_LAS(filename):
+def gen_litho_Percent_LAS(filename, start_depth):
     las = lasio.read(filename)
 
     wellNameOriginal = las.well.WELL.value
@@ -54,14 +54,16 @@ def gen_litho_Percent_LAS(filename):
 
     trimLASandEXCEL(lasFilename, excelFilename, firstRow)
 
-    LITHOLOGY_GRAVITAS_Converted(lasFilename, finalWellName, finalWellDate)
+    if (start_depth):
+        LITHOLOGY_GRAVITAS_Converted(
+            lasFilename, finalWellName, finalWellDate, start_depth)
 
 #
 # LITHOLOGY_GRAVITAS_Converted
 #
 
 
-def LITHOLOGY_GRAVITAS_Converted(lasFilename, finalWellName, finalWellDate):
+def LITHOLOGY_GRAVITAS_Converted(lasFilename, finalWellName, finalWellDate, start_depth):
     lasDraft = readLocalFile(lasFilename)
     lasDraftSplitted = lasDraft.splitlines()
 
@@ -92,7 +94,7 @@ def LITHOLOGY_GRAVITAS_Converted(lasFilename, finalWellName, finalWellDate):
                 if id > 0:
                     if val > 0:
                         matched.append(val)
-                        top = getTop(result, row, idx, firstNumRow)
+                        top = getTop(result, row, idx, start_depth)
                         base = row[0]
                         right = val if len(matched) <= 1 else sum(matched)
                         left = right - val
@@ -256,9 +258,9 @@ def trimLASandEXCEL(lasFilename, excelFilename, firstRow):
     writeLocalFile(lasFilename, finalData)
 
 
-def getTop(result, row, idx, firstNumRow):
+def getTop(result, row, idx, start_depth):
     if idx == 1:
-        return firstNumRow[0]-10
+        return start_depth
     if (len(result) > 0 and ((row[0] - result[len(result)-1][1]) > 10)):
         return result[len(result)-1][1]
     elif (len(result) > 0 and result[len(result)-1][1]-result[len(result)-1][0] > 10) and row[0] == result[len(result)-1][1]:

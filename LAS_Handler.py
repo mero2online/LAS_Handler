@@ -13,7 +13,15 @@ filetypes = (
     ('All files', '*.*'),
 )
 
-resCheckInputFile = ''
+resCheckInputFile = []
+
+
+def change_check_value():
+    if (converted_checked.get() == 0):
+        start_depth.set('')
+        start_depth_entry.config(state="disabled")
+    else:
+        start_depth_entry.config(state="normal")
 
 
 def convertLithoToLas():
@@ -26,7 +34,29 @@ def convertLithoToLas():
 
 
 def convertLithoPercentToLas():
-    convert_Litho_LAS('LITHO%')
+    cnv_ckd = converted_checked.get()
+    str_dpt = start_depth.get()
+    las_str_dpt = int(resCheckInputFile[1])
+
+    if (cnv_ckd == 0 and os.path.exists(resource_path('out'))):
+        shutil.rmtree(resource_path('out\\'))
+        os.mkdir(resource_path('out'))
+
+    if cnv_ckd == 1 and str_dpt == '':
+        messagebox.showerror('Error', 'Start Depth Can\'t be empty')
+        return
+
+    if cnv_ckd == 1 and int(str_dpt) > las_str_dpt:
+        messagebox.showerror(
+            'Error', f'Start Depth Can\'t be Large than LAS START\n{str_dpt}>{las_str_dpt}')
+        return
+
+    if cnv_ckd == 1 and int(str_dpt) == las_str_dpt:
+        messagebox.showerror(
+            'Error', f'Start Depth Can\'t be same as LAS START\n{str_dpt}={las_str_dpt}')
+        return
+
+    convert_Litho_LAS('LITHO%', str_dpt)
 
     txt = readLocalFile(resource_path('draft.las'))
     addText(txt)
@@ -54,24 +84,41 @@ def browseFile():
         selectedFilePath.set(filename)
         global resCheckInputFile
         resCheckInputFile = checkInputFile(filename)
+        convertedCheckBtn.config(state="disabled")
+        converted_checked.set(0)
+        start_depth_entry.config(state="disabled")
+        start_depth.set('')
 
-        if resCheckInputFile == 'LITHO':
+        if resCheckInputFile[0] == 'LITHO':
             convertLithoBtn.config(state="normal")
             convertLithoPercentBtn.config(state="disabled")
             convertROPBtn.config(state="disabled")
-        if resCheckInputFile == 'LITHO%':
+            convertedCheckBtn.config(state="disabled")
+            converted_checked.set(0)
+            start_depth_entry.config(state="disabled")
+            start_depth.set('')
+        if resCheckInputFile[0] == 'LITHO%':
             convertLithoPercentBtn.config(state="normal")
             convertLithoBtn.config(state="disabled")
             convertROPBtn.config(state="disabled")
-        if resCheckInputFile == 'ROP':
+            convertedCheckBtn.config(state="normal")
+        if resCheckInputFile[0] == 'ROP':
             convertROPBtn.config(state="normal")
             convertLithoPercentBtn.config(state="disabled")
             convertLithoBtn.config(state="disabled")
-        if resCheckInputFile == '':
+            convertedCheckBtn.config(state="disabled")
+            converted_checked.set(0)
+            start_depth_entry.config(state="disabled")
+            start_depth.set('')
+        if resCheckInputFile[0] == '':
             addText('')
             convertLithoBtn.config(state="disabled")
             convertLithoPercentBtn.config(state="disabled")
             convertROPBtn.config(state="disabled")
+            convertedCheckBtn.config(state="disabled")
+            converted_checked.set(0)
+            start_depth_entry.config(state="disabled")
+            start_depth.set('')
             messagebox.showerror('File error', 'Please load valid LAS file')
             selectedFilePath.set('')
             return False
@@ -84,6 +131,10 @@ def browseFile():
         convertLithoBtn.config(state="disabled")
         convertLithoPercentBtn.config(state="disabled")
         convertROPBtn.config(state="disabled")
+        convertedCheckBtn.config(state="disabled")
+        converted_checked.set(0)
+        start_depth_entry.config(state="disabled")
+        start_depth.set('')
         selectedFilePath.set('')
         saveBtn.config(state='disabled')
 
@@ -156,6 +207,13 @@ def clearFiles():
 
 clearFiles()
 
+
+def limitSizeDepth(*args):
+    value = start_depth.get()
+    if len(value) > 5:
+        start_depth.set(value[:5])
+
+
 root = Tk()
 
 Button(root, text="Browse File", background='#633192', foreground='#faebd7', borderwidth=2, relief="raised", padx=5, pady=5,
@@ -180,6 +238,23 @@ saveBtn = Button(root, text="Save File", background='#633192', foreground='#faeb
                  command=saveFile)
 saveBtn.grid(row=0, column=3, padx=5, pady=5, sticky=W)
 saveBtn.config(state='disabled')
+
+converted_checked = IntVar()
+convertedCheckBtn = Checkbutton(root, text="Converted", variable=converted_checked,
+                                background='#633192', pady=20, padx=20, borderwidth=2, relief="ridge", command=change_check_value)
+convertedCheckBtn.place(x=410, y=5, width=100, height=35)
+convertedCheckBtn.config(state="disabled")
+
+start_depth_label = Label(root, text='Start Depth',
+                          background='#633192', foreground='#faebd7')
+start_depth_label.place(x=515, y=5, width=66, height=35)
+
+start_depth = StringVar()
+start_depth.trace('w', limitSizeDepth)
+start_depth_entry = Entry(root, textvariable=start_depth,
+                          background='#fff', borderwidth=2, relief="ridge", font=('Arial', 12, 'bold'))
+start_depth_entry.place(x=590, y=5, width=55, height=35)
+start_depth_entry.config(state="disabled")
 
 selectedFilePath = StringVar()
 currentFilePath = Label(
