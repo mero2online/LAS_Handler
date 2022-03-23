@@ -1,12 +1,11 @@
 import lasio
-import datetime
 import openpyxl
 from openpyxl import Workbook
 from pandas import DataFrame
 from openpyxl.utils.dataframe import dataframe_to_rows
 
 from my_const import *
-from HelperFunc import resource_path, readLocalFile, writeLocalFile
+from HelperFunc import getFinalWellDate, resource_path, readLocalFile, writeLocalFile
 from NewCurvesData import newPerCurves, newPerLithCurves, modPerCurves
 from GetFunc import convertNULL, GET_LITHO_EMPTY, Get_DSG_Formula
 
@@ -19,10 +18,7 @@ def gen_litho_Percent_LAS(filename, start_depth):
         '(')+len('('):wellNameOriginal.rfind(')')]
     las.well.WELL = finalWellName
 
-    day = datetime.datetime.now().strftime("%d")
-    month = datetime.datetime.now().strftime("%b").upper()
-    year = datetime.datetime.now().strftime("%Y")
-    finalWellDate = f'{day}_{month}_{year}'
+    finalWellDate = getFinalWellDate()
     las.well.DATE = finalWellDate
 
     las.well.SRVC = 'EXLOG'

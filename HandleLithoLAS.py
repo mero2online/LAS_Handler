@@ -1,10 +1,9 @@
 import lasio
-import datetime
 from openpyxl import Workbook
 
 from my_const import *
 from GetFunc import *
-from HelperFunc import resource_path, readLocalFile, writeLocalFile
+from HelperFunc import getFinalWellDate, resource_path, readLocalFile, writeLocalFile
 from NewCurvesData import newLithoCurves
 
 
@@ -22,10 +21,7 @@ def gen_litho_LAS(filename):
         '(')+len('('):wellNameOriginal.rfind(')')]
     las.well.WELL = finalWellName
 
-    day = datetime.datetime.now().strftime("%d")
-    month = datetime.datetime.now().strftime("%b").upper()
-    year = datetime.datetime.now().strftime("%Y")
-    finalWellDate = f'{day}_{month}_{year}'
+    finalWellDate = getFinalWellDate()
     las.well.DATE = finalWellDate
 
     las.well.SRVC = 'EXLOG'
