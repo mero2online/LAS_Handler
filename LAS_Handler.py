@@ -42,19 +42,20 @@ def convertLithoPercentToLas():
         shutil.rmtree(resource_path('out\\'))
         os.mkdir(resource_path('out'))
 
-    if cnv_ckd == 1 and str_dpt == '':
-        messagebox.showerror('Error', 'Start Depth Can\'t be empty')
-        return
+    if cnv_ckd == 1:
+        if str_dpt == '':
+            messagebox.showerror('Error', 'Start Depth Can\'t be empty')
+            return
 
-    if cnv_ckd == 1 and int(str_dpt) > las_str_dpt:
-        messagebox.showerror(
-            'Error', f'Start Depth Can\'t be Large than LAS START\n{str_dpt}>{las_str_dpt}')
-        return
+        if int(str_dpt) > las_str_dpt:
+            messagebox.showerror(
+                'Error', f'Start Depth Can\'t be Large than LAS START\n{str_dpt}>{las_str_dpt}')
+            return
 
-    if cnv_ckd == 1 and int(str_dpt) == las_str_dpt:
-        messagebox.showerror(
-            'Error', f'Start Depth Can\'t be same as LAS START\n{str_dpt}={las_str_dpt}')
-        return
+        if int(str_dpt) == las_str_dpt:
+            messagebox.showerror(
+                'Error', f'Start Depth Can\'t be same as LAS START\n{str_dpt}={las_str_dpt}')
+            return
 
     convert_Litho_LAS('LITHO%', str_dpt)
 
