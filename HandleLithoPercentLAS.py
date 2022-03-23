@@ -1,3 +1,4 @@
+import shutil
 import lasio
 import openpyxl
 from openpyxl import Workbook
@@ -49,6 +50,12 @@ def gen_litho_Percent_LAS(filename, start_depth):
     LITHOLOGY()
 
     trimLASandEXCEL(lasFilename, excelFilename, firstRow)
+
+    lithology_gravitas_name = f'{finalWellName}_LITHOLOGY_GRAVITAS_{finalWellDate}'
+    shutil.copy(resource_path('draft.las'), resource_path(
+        f'out\\{lithology_gravitas_name}.las'))
+    shutil.copy(resource_path('draft.xlsx'), resource_path(
+        f'out\\{lithology_gravitas_name}.xlsx'))
 
     if (start_depth):
         LITHOLOGY_GRAVITAS_Converted(
@@ -120,7 +127,7 @@ def DSG():
         if (idx == 18):
             data = [0]*len(las[x])
             las.delete_curve(x)
-            las.insert_curve(17, x, data)
+            las.insert_curve(18, x, data)
         elif (idx == 27):
             data = las[x]
             las.delete_curve(x)
