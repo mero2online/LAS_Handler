@@ -113,47 +113,47 @@ newLithoCurves = [
     {
         "name": "VOLCUT_ARGDOL",
         "desc": "3 Argillaceous",
-        "value": 300
+        "value": 6
     },
     {
         "name": "VOLCUT_ARGLS",
         "desc": "4 Argillaceous",
-        "value": 301
+        "value": 13
     },
     {
         "name": "VOLCUT_CALDOL",
         "desc": "5 Calcarenite",
-        "value": 302
+        "value": 5
     },
     {
         "name": "VOLCUT_CALLS",
         "desc": "6 Calcarenite",
-        "value": 304
+        "value": 10
     },
     {
         "name": "VOLCUT_CEMENT",
         "desc": "7 Cement",
-        "value": 300
+        "value": 28
     },
     {
         "name": "VOLCUT_CHERT",
         "desc": "8 Chert",
-        "value": 0
+        "value": 23
     },
     {
         "name": "VOLCUT_CLAY",
         "desc": "9 Clay",
-        "value": 17
+        "value": 16
     },
     {
         "name": "VOLCUT_COAL",
         "desc": "10 Coal_Lignite_TAR",
-        "value": 14
+        "value": 24
     },
     {
         "name": "VOLCUT_CONG",
         "desc": "11 Conglomerate",
-        "value": 5
+        "value": 22
     },
     {
         "name": "VOLCUT_DOL",
@@ -168,17 +168,17 @@ newLithoCurves = [
     {
         "name": "VOLCUT_GYP",
         "desc": "14 Gypsum",
-        "value": 0
+        "value": 3
     },
     {
         "name": "VOLCUT_HAL",
         "desc": "15 Halite",
-        "value": 0
+        "value": 1
     },
     {
         "name": "VOLCUT_IGN",
         "desc": "16 Igneous",
-        "value": 0
+        "value": 25
     },
     {
         "name": "VOLCUT_LS",
@@ -188,7 +188,7 @@ newLithoCurves = [
     {
         "name": "VOLCUT_MARL",
         "desc": "18 Marl",
-        "value": 99
+        "value": 15
     },
     {
         "name": "VOLCUT_SAND",
