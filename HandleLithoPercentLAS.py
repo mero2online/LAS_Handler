@@ -97,7 +97,7 @@ def LITHOLOGY_GRAVITAS_Converted(lasFilename, finalWellName, finalWellDate, star
                 if id > 0:
                     if val > 0:
                         matched.append(val)
-                        top = getTop(result, row, idx, start_depth)
+                        top = getTop(result, row, idx, int(start_depth))
                         base = row[0]
                         right = val if len(matched) <= 1 else sum(matched)
                         left = right - val

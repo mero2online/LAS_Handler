@@ -57,7 +57,7 @@ def convertLithoPercentToLas():
                 'Error', f'Start Depth Can\'t be same as LAS START\n{str_dpt}={las_str_dpt}')
             return
 
-    convert_Litho_LAS('LITHO%', int(str_dpt))
+    convert_Litho_LAS('LITHO%', str_dpt)
 
     txt = readLocalFile(resource_path('draft.las'))
     addText(txt)
