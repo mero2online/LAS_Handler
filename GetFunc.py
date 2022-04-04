@@ -1,8 +1,5 @@
-import numpy as np
-
-
 def GET_LITHO_DATA(litho, lithoValue):
-    arr = np.nan_to_num(litho, copy=True)
+    arr = list(litho)
     for x in range(len(arr)):
         if arr[x] == lithoValue:
             arr[x] = 100
@@ -12,14 +9,14 @@ def GET_LITHO_DATA(litho, lithoValue):
 
 
 def GET_LITHO_EMPTY(litho):
-    arr = np.nan_to_num(litho, copy=True)
+    arr = list(litho)
     for x in range(len(arr)):
         arr[x] = 0
     return arr
 
 
 def convertNULL(litho):
-    arr = np.nan_to_num(litho, copy=True)
+    arr = list(litho)
     for x in range(len(arr)):
         if arr[x] == -999.2500:
             arr[x] = 0
