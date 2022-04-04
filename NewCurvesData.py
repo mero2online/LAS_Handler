@@ -112,22 +112,22 @@ newLithoCurves = [
     },
     {
         "name": "VOLCUT_ARGDOL",
-        "desc": "3 Argillaceous",
+        "desc": "3 Argillaceous Dolomite",
         "value": 6
     },
     {
         "name": "VOLCUT_ARGLS",
-        "desc": "4 Argillaceous",
+        "desc": "4 Argillaceous Limestone",
         "value": 13
     },
     {
         "name": "VOLCUT_CALDOL",
-        "desc": "5 Calcarenite",
+        "desc": "5 Calcarenite Dolomite",
         "value": 5
     },
     {
         "name": "VOLCUT_CALLS",
-        "desc": "6 Calcarenite",
+        "desc": "6 Calcarenite Limestone",
         "value": 10
     },
     {
@@ -162,7 +162,7 @@ newLithoCurves = [
     },
     {
         "name": "VOLCUT_DOLLS",
-        "desc": "13 Dolomitic",
+        "desc": "13 Dolomitic Limestone",
         "value": 11
     },
     {
