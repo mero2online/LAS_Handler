@@ -10,12 +10,6 @@ from NewCurvesData import newLithoCurves
 def gen_litho_LAS(filename):
     las = lasio.read(filename)
 
-    # print(las.keys())
-    # LTY_remove_NaN = np.nan_to_num(LTY, copy=True)
-    # volcut_anhy = [math.trunc(value) for value in LTY_remove_NaN]
-    # print(las.get_curve('LTY'))
-    # print(las['LTY'])
-
     wellNameOriginal = las.well.WELL.value
     finalWellName = wellNameOriginal[wellNameOriginal.find(
         '(')+len('('):wellNameOriginal.rfind(')')]

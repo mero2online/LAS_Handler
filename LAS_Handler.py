@@ -79,7 +79,7 @@ def browseFile():
     filename = filedialog.askopenfilename(
         title='Select a file...',
         filetypes=filetypes,)
-    # root.destroy()
+
     clearFiles()
     if (filename):
         selectedFilePath.set(filename)
@@ -156,29 +156,6 @@ def saveFile():
 
         messagebox.showinfo(
             'Success', f'Files saved successfully to\n{dest_dir}')
-
-        # srcLAS = resource_path('draft.las')
-        # dstLAS = f'{filename}/{resCheckInputFile}_OUTPUT.las'
-        # shutil.copy(srcLAS, dstLAS)
-
-        # # make a copy of the invoice to work with
-        # if resCheckInputFile == 'LITHO%':
-        #     src = resource_path('draft.xlsx')
-        #     dst = f'{filename}/{resCheckInputFile}_OUTPUT.xlsx'
-        #     shutil.copy(src, dst)
-        #     src = resource_path('draft_DSG.xlsx')
-        #     dst = f'{filename}/{resCheckInputFile}_DSG_OUTPUT.xlsx'
-        #     shutil.copy(src, dst)
-        #     src = resource_path('draft_DSG.las')
-        #     dst = f'{filename}/{resCheckInputFile}_DSG_OUTPUT.las'
-        #     shutil.copy(src, dst)
-        #     src = resource_path('draft_LITHOLOGY.las')
-        #     dst = f'{filename}/{resCheckInputFile}_LITHOLOGY_OUTPUT.las'
-        #     shutil.copy(src, dst)
-        #     src = resource_path('draft_LITHOLOGY.xlsx')
-        #     dst = f'{filename}/{resCheckInputFile}_LITHOLOGY_OUTPUT.xlsx'
-        #     shutil.copy(src, dst)
-        # root.destroy()
 
 
 def getText():
