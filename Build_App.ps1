@@ -1,1 +1,1 @@
-pyinstaller --add-data 'src;src' -i ".\src\las.ico" --onefile --windowed --exclude-module matplotlib LAS_Handler.py
+pyinstaller LAS_Handler.py --onefile --windowed --add-data 'src;src' -i ".\src\las.ico" --splash ".\src\las.png" --exclude-module matplotlib 

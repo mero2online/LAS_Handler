@@ -8,6 +8,12 @@ import shutil
 from HelperFunc import getFinalWellDate, getTimeNowText, resource_path, checkInputFile, readLocalFile, writeLocalFile
 from ConvertLithoLAS import convert_Litho_LAS
 
+try:
+    import pyi_splash # type: ignore
+    pyi_splash.close()
+except:
+    pass
+
 filetypes = (
     ('LAS files', '*.las'),
     ('All files', '*.*'),
@@ -148,7 +154,7 @@ def saveFile():
         date = getFinalWellDate()
         time = getTimeNowText()
         src_files = os.listdir(resource_path('out\\'))
-        dest_dir = f'{filename}/Output-{date}-{time}'
+        dest_dir = f'{filename}/LAS-Handler-Output-{date}-{time}'
         os.mkdir(dest_dir)
         for file_name in src_files:
             if os.path.isfile(resource_path(f'out\\{file_name}')):
