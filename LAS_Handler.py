@@ -2,6 +2,7 @@ from tkinter import filedialog
 from tkinter import *
 from tkinter import scrolledtext
 from tkinter import messagebox
+import asyncio
 import os
 import shutil
 
@@ -9,7 +10,7 @@ from HelperFunc import getFinalWellDate, getTimeNowText, resource_path, checkInp
 from ConvertLithoLAS import convert_Litho_LAS
 
 try:
-    import pyi_splash # type: ignore
+    import pyi_splash  # type: ignore
     pyi_splash.close()
 except:
     pass
@@ -149,19 +150,25 @@ def browseFile():
 def saveFile():
     # save-as dialog
     filename = filedialog.askdirectory()
+    asyncio.run(saveAllFiles(filename))
 
+
+async def saveAllFiles(filename):
     if (filename):
         date = getFinalWellDate()
         time = getTimeNowText()
         src_files = os.listdir(resource_path('out\\'))
         dest_dir = f'{filename}/LAS-Handler-Output-{date}-{time}'
-        os.mkdir(dest_dir)
-        for file_name in src_files:
-            if os.path.isfile(resource_path(f'out\\{file_name}')):
-                shutil.copy(resource_path(f'out\\{file_name}'), dest_dir)
-
+        await copyFiles(src_files, dest_dir)
         messagebox.showinfo(
             'Success', f'Files saved successfully to\n{dest_dir}')
+
+
+async def copyFiles(src_files, dest_dir):
+    os.mkdir(dest_dir)
+    for file_name in src_files:
+        if os.path.isfile(resource_path(f'out\\{file_name}')):
+            shutil.copy(resource_path(f'out\\{file_name}'), dest_dir)
 
 
 def getText():
