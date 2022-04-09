@@ -7,7 +7,7 @@ from openpyxl.utils.dataframe import dataframe_to_rows
 
 from my_const import *
 from HelperFunc import getFinalWellDate, resource_path, readLocalFile, writeLocalFile
-from NewCurvesData import newPerCurves, newPerLithCurves, modPerCurves
+from NewCurvesData import newPerCurves, newPerLithCurves, modPerCurves, newPerCurvesDSG
 from GetFunc import convertNULL, GET_LITHO_EMPTY, Get_DSG_Formula
 
 
@@ -24,10 +24,12 @@ def gen_litho_Percent_LAS(filename, start_depth):
 
     las.well.SRVC = 'EXLOG'
 
+    # Remove Unused Curves
     for idx, x in enumerate(las.keys()):
         if (idx == 21 or idx == 29 or idx == 30 or idx == 31 or idx == 32 or idx == 33):
             las.delete_curve(x)
 
+    # Convert NULL values and delete curve then append it
     for idx, x in enumerate(las.keys()):
         res = convertNULL(las[x])
         las.delete_curve(x)
@@ -123,6 +125,8 @@ def LITHOLOGY_GRAVITAS_Converted(lasFilename, finalWellName, finalWellDate, star
 
 def DSG():
     las = lasio.read(resource_path('draft.las'))
+
+    # Convert all 'SNDSH' values to 0 and Change position of 'CEMENT'
     for idx, x in enumerate(las.keys()):
         if (idx == 18):
             data = [0]*len(las[x])
@@ -133,6 +137,7 @@ def DSG():
             las.delete_curve(x)
             las.insert_curve(26, x, data)
 
+    # Remove Unused Curves
     for idx, x in enumerate(las.keys()):
         if (idx == 9 or idx == 10 or idx == 16 or idx == 25):
             las.delete_curve(x)
@@ -142,13 +147,18 @@ def DSG():
 
     las.to_excel(excelFilename)
 
+    # Rename all curves for DSG by delete curve then insert it
     for idx, x in enumerate(las.keys()):
-        if (idx > 1):
-            data = las[x]+las[las.keys()[idx-1]]
-            las.delete_curve(x)
-            las.insert_curve(idx, x, data)
+        mnemonic = newPerCurvesDSG[idx]['name']
+        data = las[x] if idx <= 1 else las[x]+las[las.keys()[idx-1]]
+        unit = 'F' if idx < 1 else '%'
+        descr = newPerCurvesDSG[idx]['desc']
+        las.delete_curve(x)
+        las.insert_curve(idx, mnemonic, data, unit=unit, descr=descr)
 
-    las.insert_curve(1, 'Depth.org', las['DEPTH'])
+    las.insert_curve(
+        1, 'DEPTH_ORIG', las['DEPTH'], unit='F', descr='Depth Orig')
+
     las.write(lasFilename, fmt='%.0f', len_numeric_field=5)
     firstRow = ' '.join(las.keys())
     trimLASandEXCEL(lasFilename, excelFilename, firstRow)

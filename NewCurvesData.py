@@ -206,3 +206,102 @@ newLithoCurves = [
         "value": 19
     },
 ]
+
+newPerCurvesDSG = [
+    {
+        "name": "DEPTH",
+        "desc": "Hole Depth",
+    },
+    {
+        "name": "HALITE",
+        "desc": "1 halite",
+    },
+    {
+        "name": "ANHY",
+        "desc": "2 Anhydrite",
+    },
+    {
+        "name": "GYPSUM",
+        "desc": "3 GYPSUM",
+    },
+    {
+        "name": "DOLO",
+        "desc": "4 dolomite",
+    },
+    {
+        "name": "CALCDOLO",
+        "desc": "5 calcarenite Dolomite",
+    },
+    {
+        "name": "ARGDOLO",
+        "desc": "6 Argillaceous Dolomite",
+    },
+    {
+        "name": "SNDDOLO",
+        "desc": "7 Sandy Dolomite",
+    },
+    {
+        "name": "CARBON",
+        "desc": "8 Carbonate ",
+    },
+    {
+        "name": "DOLOMITE",
+        "desc": "9 Dolomitic Limestone",
+    },
+    {
+        "name": "LIME",
+        "desc": "10 Limestone",
+    },
+    {
+        "name": "ARGLIME",
+        "desc": "11 Argillaceous Limestone ",
+    },
+    {
+        "name": "SANDLIME",
+        "desc": "12 Sandy Limestone",
+    },
+    {
+        "name": "MARL",
+        "desc": "16 Marl",
+    },
+    {
+        "name": "SHALE",
+        "desc": "17 Shale",
+    },
+    {
+        "name": "SILTSHALE",
+        "desc": "18 Silty Shale",
+    },
+    {
+        "name": "SILT",
+        "desc": "19 Siltstone",
+    },
+    {
+        "name": "SANDSTONE",
+        "desc": "20 Sandstone",
+    },
+    {
+        "name": "CONGLOM",
+        "desc": "21 Conglomerate",
+    },
+    {
+        "name": "CHERT",
+        "desc": "22 Chert",
+    },
+    {
+        "name": "COAL",
+        "desc": "23 Coal",
+    },
+    {
+        "name": "IGNEOUS",
+        "desc": "24 Igneous",
+    },
+    {
+        "name": "CEMENT",
+        "desc": "25 Cement",
+    },
+    {
+        "name": "UNKNOWN",
+        "desc": "26 Unknown",
+    },
+]
