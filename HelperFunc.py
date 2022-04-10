@@ -1,10 +1,14 @@
 import os
+import sys
 import lasio
 import datetime
 
 
 def resource_path(relative_path):
-    base_path = os.path.abspath(".")
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
 
     return os.path.join(base_path, 'src\\', relative_path)
 
