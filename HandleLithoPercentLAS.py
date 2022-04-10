@@ -1,3 +1,4 @@
+import os
 import shutil
 import lasio
 import openpyxl
@@ -8,7 +9,7 @@ from openpyxl.utils.dataframe import dataframe_to_rows
 from my_const import *
 from HelperFunc import getFinalWellDate, resource_path, readLocalFile, writeLocalFile
 from NewCurvesData import newPerCurves, newPerLithCurves, modPerCurves, newPerCurvesDSG
-from GetFunc import convertNULL, GET_LITHO_EMPTY, Get_DSG_Formula
+from GetFunc import convertNULL, GET_LITHO_EMPTY, Get_DSG_Formula, GetDSG_LAS_Header, getNewPerWellDSG
 
 
 def gen_litho_Percent_LAS(filename, start_depth):
@@ -53,7 +54,7 @@ def gen_litho_Percent_LAS(filename, start_depth):
 
     trimLASandEXCEL(lasFilename, excelFilename, firstRow)
 
-    lithology_gravitas_name = f'{finalWellName}_LITHOLOGY_GRAVITAS_{finalWellDate}'
+    lithology_gravitas_name = f'{finalWellName}_LITHOLOGY_{finalWellDate}_GRAVITAS'
     shutil.copy(resource_path('draft.las'), resource_path(
         f'out\\{lithology_gravitas_name}.las'))
     shutil.copy(resource_path('draft.xlsx'), resource_path(
@@ -159,8 +160,44 @@ def DSG():
     las.insert_curve(
         1, 'DEPTH_ORIG', las['DEPTH'], unit='F', descr='Depth Orig')
 
+    las.well['STEP'].descr = 'STEP DEPTH'
+    del las.well['PROV']
+
+    cwd = os.getcwd()
+    text = readLocalFile(f'{cwd}\config.csv')
+
+    result = []
+
+    for line in text.splitlines():
+        result.append(line.split(",")[1])
+
+    reAdd = ['UWI', 'WELL', 'COMP', 'FLD', 'LOC', 'SRVC', 'DATE']
+    for x in reAdd:
+        result.append(las.well[x].value)
+        del las.well[x]
+
+    newPerWellDSG = getNewPerWellDSG(result)
+    for idx, x in enumerate(newPerWellDSG):
+        las.well[newPerWellDSG[idx]['mnemonic']] = lasio.HeaderItem(
+            mnemonic=newPerWellDSG[idx]['mnemonic'],
+            value=newPerWellDSG[idx]['value'],
+            descr=newPerWellDSG[idx]['descr'],
+            unit=newPerWellDSG[idx]['unit'],)
+
     las.write(lasFilename, fmt='%.0f', len_numeric_field=5)
-    firstRow = ' '.join(las.keys())
+
+    txt = readLocalFile(lasFilename)
+    startOne = '~Well ------------------------------------------------------'
+    endOne = '~Curve Information -----------------------------------------'
+    textOneLas = txt[txt.find(startOne)+len(startOne):txt.rfind(endOne)]
+
+    startTwo = '~Curve Information -----------------------------------------'
+    endTwo = '~Params ----------------------------------------------------'
+    textTwoLas = txt[txt.find(startTwo)+len(startTwo):txt.rfind(endTwo)]
+
+    finalDSG_Header = GetDSG_LAS_Header(textOneLas, textTwoLas)
+
+    firstRow = '~A '+' '.join(las.keys())
     trimLASandEXCEL(lasFilename, excelFilename, firstRow)
 
     workbook = openpyxl.load_workbook(excelFilename)
@@ -190,7 +227,8 @@ def DSG():
     workbook.save(resource_path(f'out\\{finalFileName}.xlsx'))
 
     finalData = readLocalFile(lasFilename)
-    writeLocalFile(resource_path(f'out\\{finalFileName}.las'), finalData)
+    finalLAS = f'{finalDSG_Header}{finalData}'
+    writeLocalFile(resource_path(f'out\\{finalFileName}.las'), finalLAS)
 
 #
 # LITHOLOGY

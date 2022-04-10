@@ -245,7 +245,7 @@ newPerCurvesDSG = [
         "desc": "8 Carbonate ",
     },
     {
-        "name": "DOLOMITE",
+        "name": "DOLOLIME",
         "desc": "9 Dolomitic Limestone",
     },
     {

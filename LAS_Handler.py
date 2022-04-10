@@ -96,6 +96,7 @@ def browseFile():
         converted_checked.set(0)
         start_depth_entry.config(state="disabled")
         start_depth.set('')
+        saveBtn.config(state='disabled')
 
         if resCheckInputFile[0] == 'LITHO':
             convertLithoBtn.config(state="normal")
@@ -202,7 +203,14 @@ def clearFiles():
         os.remove(resource_path('draft_LITHOLOGY.xlsx'))
 
 
+def copy_DSG_ConfigFile():
+    cwd = os.getcwd()
+    if os.path.exists(f'{cwd}\config.csv') == False:
+        shutil.copy(resource_path('config.csv'), cwd)
+
+
 clearFiles()
+copy_DSG_ConfigFile()
 
 
 def limitSizeDepth(*args):

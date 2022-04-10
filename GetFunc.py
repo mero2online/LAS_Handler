@@ -78,3 +78,127 @@ def aggregate_ROP_FiveFeet(arr):
             alterArr.append(round(sum(x)))
 
     return alterArr
+
+
+def getNewPerWellDSG(result):
+    PROV, LONG, LATI, XCOORD, YCOORD, ELEV, TD, UWI, WELL, COMP, FLD, LOC, SRVC, DATE = result
+    return[
+        {
+            "mnemonic": "UWI",
+            "value": UWI,
+            "descr": "UWI",
+            "unit": "",
+        },
+        {
+            "mnemonic": "API",
+            "value": "XXXXXXXX",
+            "descr": "UWI",
+            "unit": "",
+        },
+        {
+            "mnemonic": "WELL",
+            "value": WELL,
+            "descr": "COMMON WELL NAME",
+            "unit": "",
+        },
+        {
+            "mnemonic": "COMP",
+            "value": COMP,
+            "descr": "WELL OPERATOR",
+            "unit": "",
+        },
+        {
+            "mnemonic": "FLD",
+            "value": FLD,
+            "descr": "FIELD",
+            "unit": "",
+        },
+        {
+            "mnemonic": "LIC",
+            "value": "UNKNOWN",
+            "descr": "AUTHORIZATION NO",
+            "unit": "",
+        },
+        {
+            "mnemonic": "LOC",
+            "value": LOC,
+            "descr": "BASIN",
+            "unit": "",
+        },
+        {
+            "mnemonic": "CTRY",
+            "value": "Saudi Arabia",
+            "descr": "COUNTRY",
+            "unit": "",
+        },
+        {
+            "mnemonic": "STAT",
+            "value": "UNKNOWN",
+            "descr": "STATE",
+            "unit": "",
+        },
+        {
+            "mnemonic": "CNTY",
+            "value": "UNKNOWN",
+            "descr": "COUNTY",
+            "unit": "",
+        },
+        {
+            "mnemonic": "PROV",
+            "value": PROV,
+            "descr": "STATE",
+            "unit": "",
+        },
+        {
+            "mnemonic": "SRVC",
+            "value": SRVC,
+            "descr": "COMPANY",
+            "unit": "",
+        },
+        {
+            "mnemonic": "DATE",
+            "value": DATE,
+            "descr": "LOG RUN DATE",
+            "unit": "",
+        },
+        {
+            "mnemonic": "LONG",
+            "value": LONG,
+            "descr": "LONGITUDE",
+            "unit": "",
+        },
+        {
+            "mnemonic": "LATI",
+            "value": LATI,
+            "descr": "LATITUDE",
+            "unit": "",
+        },
+        {
+            "mnemonic": "XCOORD",
+            "value": XCOORD,
+            "descr": "X COORDINATE",
+            "unit": "",
+        },
+        {
+            "mnemonic": "YCOORD",
+            "value": YCOORD,
+            "descr": "Y COORDINATE",
+            "unit": "",
+        },
+        {
+            "mnemonic": "ELEV",
+            "value": ELEV,
+            "descr": "ELEVATION",
+            "unit": "FT",
+        },
+        {
+            "mnemonic": "TD",
+            "value": TD,
+            "descr": "TOTAL DEPTH",
+            "unit": "FT",
+        },
+    ]
+
+
+def GetDSG_LAS_Header(well, curves):
+    return f'~Version Information\n VERS.                  2.0:   CWLS log ASCII Standard -VERSION 2.0\n WRAP.                   NO:   One line per depth step\n\n~Well Information Block\n#MNEM.UNIT     VALUE/NAME     DESCRIPTION\n#---------     -----------    ---------------------------\n{well}\n~Parameter Information Block\n#MNEM.UNIT       Value        Description\n#---------     -----------    ---------------------------\n\nTAPE_NAME. UNK. Las:\nTool_SREING.              UNKNOWN:\nWN   .        UNK: FIELD NAME\nPROJECT.                  :\nSET   .   MUDLOG_LITHOLOGY: \n\n~Curve Information Block\n#MNEM.UNIT                 API CODE     Curve Description\n#---------               -----------    ---------------------------\n{curves}\n'
