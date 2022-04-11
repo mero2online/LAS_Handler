@@ -3,13 +3,15 @@ import shutil
 import lasio
 import openpyxl
 from openpyxl import Workbook
+from openpyxl.styles import Alignment, Font, PatternFill
 from pandas import DataFrame
 from openpyxl.utils.dataframe import dataframe_to_rows
+from openpyxl.utils import get_column_letter
 
 from my_const import *
 from HelperFunc import getFinalWellDate, resource_path, readLocalFile, writeLocalFile
 from NewCurvesData import newPerCurves, newPerLithCurves, modPerCurves, newPerCurvesDSG
-from GetFunc import convertNULL, GET_LITHO_EMPTY, Get_DSG_Formula, GetDSG_LAS_Header, getNewPerWellDSG
+from GetFunc import convertNULL, GET_LITHO_EMPTY, Get_DSG_Formula, GetDSG_LAS_Header, getNewPerWellDSG, GetDSG_LAS_Header_ColorCode
 
 
 def gen_litho_Percent_LAS(filename, start_depth):
@@ -157,6 +159,24 @@ def DSG():
         las.delete_curve(x)
         las.insert_curve(idx, mnemonic, data, unit=unit, descr=descr)
 
+    workbook = openpyxl.load_workbook(excelFilename)
+    wsh = workbook['Curves']
+
+    cellAlignment = Alignment(horizontal='center', vertical='center')
+    for idx, cell in enumerate(wsh["1:1"]):
+        col_letter = get_column_letter(idx+1)
+        fg = GetDSG_LAS_Header_ColorCode(idx)
+        cell.value = las.keys()[idx]
+        wsh.column_dimensions[col_letter].width = len(f"{cell.value}") * 1.5
+        cell.alignment = cellAlignment
+        cell.font = Font(name='Courier New')
+        if fg:
+            cell.fill = PatternFill(fgColor=fg,  fill_type="solid")
+        for idx, cell in enumerate(wsh[col_letter]):
+            cell.alignment = cellAlignment
+
+    workbook.save(resource_path(excelFilename))
+
     las.insert_curve(
         1, 'DEPTH_ORIG', las['DEPTH'], unit='F', descr='Depth Orig')
 
@@ -201,11 +221,15 @@ def DSG():
     trimLASandEXCEL(lasFilename, excelFilename, firstRow)
 
     workbook = openpyxl.load_workbook(excelFilename)
-    workbook.create_sheet(title="LITHOLOGY-DSG")
+    ws2Title = f"{las.well['WELL'].value}_LITHOLOGY-DSG"
+    workbook.create_sheet(title=ws2Title)
     ws = workbook['Curves']
     ws.title = 'original values'
     ws1 = workbook['original values']
-    ws2 = workbook['LITHOLOGY-DSG']
+    ws2 = workbook[ws2Title]
+
+    ws1.freeze_panes = ws1['A2']
+
     df = DataFrame(ws1.values)
     rows = dataframe_to_rows(df, index=False, header=False)
     for r_idx, row in enumerate(rows, 1):
@@ -221,6 +245,14 @@ def DSG():
             ws2[f'B{i}'] = 'Depth.org'
         else:
             ws2[f'B{i}'] = f'=A{i}'
+
+    for idx, cell in enumerate(ws2["1:1"]):
+        col_letter = get_column_letter(idx+1)
+        ws2.column_dimensions[col_letter].width = len(f"{cell.value}") * 1.5
+        cell.alignment = cellAlignment
+        cell.font = Font(name='Courier New')
+        for idx, cell in enumerate(ws2[col_letter]):
+            cell.alignment = cellAlignment
 
     finalFileName = f'{las.well.WELL.value}_LITHOLOGY-DSG_{las.well.DATE.value}'
     # workbook.save(excelFilename)

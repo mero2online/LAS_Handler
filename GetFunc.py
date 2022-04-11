@@ -200,5 +200,25 @@ def getNewPerWellDSG(result):
     ]
 
 
+def GetDSG_LAS_Header_ColorCode(idx):
+    match idx:
+        case 2:
+            return "FF00FF"
+        case 4:
+            return "548220"
+        case 9:
+            return "33CCCC"
+        case 10:
+            return "99CCCC"
+        case 14:
+            return "A6A6A6"
+        case 16:
+            return "FF6600"
+        case 17:
+            return "FFFF00"
+        case _:
+            return ""
+
+
 def GetDSG_LAS_Header(well, curves):
     return f'~Version Information\n VERS.                  2.0:   CWLS log ASCII Standard -VERSION 2.0\n WRAP.                   NO:   One line per depth step\n\n~Well Information Block\n#MNEM.UNIT     VALUE/NAME     DESCRIPTION\n#---------     -----------    ---------------------------\n{well}\n~Parameter Information Block\n#MNEM.UNIT       Value        Description\n#---------     -----------    ---------------------------\n\nTAPE_NAME. UNK. Las:\nTool_SREING.              UNKNOWN:\nWN   .        UNK: FIELD NAME\nPROJECT.                  :\nSET   .   MUDLOG_LITHOLOGY: \n\n~Curve Information Block\n#MNEM.UNIT                 API CODE     Curve Description\n#---------               -----------    ---------------------------\n{curves}\n'
