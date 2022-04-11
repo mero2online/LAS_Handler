@@ -2,6 +2,9 @@ import os
 import shutil
 import lasio
 import openpyxl
+import xlwt
+import xlrd
+from copy2 import copy2
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font, PatternFill
 from pandas import DataFrame
@@ -59,8 +62,37 @@ def gen_litho_Percent_LAS(filename, start_depth):
     lithology_gravitas_name = f'{finalWellName}_LITHOLOGY_{finalWellDate}_GRAVITAS'
     shutil.copy(resource_path('draft.las'), resource_path(
         f'out\\{lithology_gravitas_name}.las'))
-    shutil.copy(resource_path('draft.xlsx'), resource_path(
-        f'out\\{lithology_gravitas_name}.xlsx'))
+
+    lasDraft = readLocalFile(lasFilename)
+    lasDraftSplitted = lasDraft.splitlines()
+
+    all_rows = []
+    for idx, x in enumerate(lasDraftSplitted):
+        if idx > 0:
+            x = [int(i) for i in x.split()]
+            all_rows.append(x)
+
+    # load the excel file
+    inBook = xlrd.open_workbook(
+        resource_path('LITHOLOGY_GRAVITAS.xls'), formatting_info=True, on_demand=True)
+    inSheet = inBook .sheet_by_index(0)
+
+    # copy the contents of excel file
+    outBook, outStyle = copy2(inBook)
+
+    # open the first sheet
+    w_sheet = outBook.get_sheet(0)
+
+    for idx, row in enumerate(all_rows, 1):
+        for idc, cell in enumerate(row):
+            xf_index = inSheet.cell_xf_index(idx, idc)
+            saved_style = outStyle[xf_index]
+            w_sheet.write(idx, idc, cell, saved_style)
+
+    outBook.get_sheet(0).name = f'{finalWellName}_LITHOLOGY_GRAVITAS'
+    # save the file
+    outBook.save(resource_path(
+        f'out\\{lithology_gravitas_name}.xls'))
 
     if (start_depth):
         LITHOLOGY_GRAVITAS_Converted(
