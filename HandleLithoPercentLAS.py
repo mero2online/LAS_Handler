@@ -216,7 +216,7 @@ def DSG():
     del las.well['PROV']
 
     cwd = os.getcwd()
-    text = readLocalFile(f'{cwd}\config.csv')
+    text = readLocalFile(f'{cwd}\LAS_Handler_DSG_Config.csv')
 
     result = []
 

@@ -205,8 +205,8 @@ def clearFiles():
 
 def copy_DSG_ConfigFile():
     cwd = os.getcwd()
-    if os.path.exists(f'{cwd}\config.csv') == False:
-        shutil.copy(resource_path('config.csv'), cwd)
+    if os.path.exists(f'{cwd}\LAS_Handler_DSG_Config.csv') == False:
+        shutil.copy(resource_path('LAS_Handler_DSG_Config.csv'), cwd)
 
 
 clearFiles()
