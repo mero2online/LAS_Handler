@@ -178,8 +178,10 @@ def getText():
 
 
 def addText(txt):
+    txtbox.config(state="normal")
     txtbox.delete('1.0', END)
     txtbox.insert(INSERT, txt)
+    txtbox.config(state="disabled")
 
 
 def insertText(txt):
@@ -267,7 +269,8 @@ currentFilePath = Label(
     root, textvariable=selectedFilePath, background='#633192', foreground='#faebd7', anchor=W)
 currentFilePath.grid(row=1, column=0, columnspan=4, pady=5, padx=5, sticky=E+W)
 
-group1 = LabelFrame(root, text="LAS", padx=5, pady=5, background='#633192', foreground='#faebd7')
+group1 = LabelFrame(root, text="LAS", padx=5, pady=5,
+                    background='#633192', foreground='#faebd7')
 group1.grid(row=2, column=0, columnspan=4, padx=10, pady=10, sticky=E+W+N+S)
 
 # Create the textbox
