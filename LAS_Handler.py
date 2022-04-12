@@ -267,12 +267,17 @@ currentFilePath = Label(
     root, textvariable=selectedFilePath, background='#633192', foreground='#faebd7', anchor=W)
 currentFilePath.grid(row=1, column=0, columnspan=4, pady=5, padx=5, sticky=E+W)
 
-group1 = LabelFrame(root, text="LAS", padx=5, pady=5)
+group1 = LabelFrame(root, text="LAS", padx=5, pady=5, background='#633192', foreground='#faebd7')
 group1.grid(row=2, column=0, columnspan=4, padx=10, pady=10, sticky=E+W+N+S)
 
 # Create the textbox
-txtbox = scrolledtext.ScrolledText(group1)
+txtbox = scrolledtext.ScrolledText(group1, font=('monospace', 10, 'bold'))
 txtbox.grid(row=0, column=0, columnspan=4, sticky=E+W+N+S)
+
+madeWithLoveBy = Label(
+    group1, text='Made with ❤ by Mohamed Omar', background='#633192', foreground='#faebd7',
+    font=('monospace', 9, 'bold'))
+madeWithLoveBy.grid(row=1, column=3, padx=5, pady=5, sticky=W)
 
 root.title('LAS_Handler')
 root.geometry('1100x500')
