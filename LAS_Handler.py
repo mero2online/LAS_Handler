@@ -8,6 +8,8 @@ import shutil
 
 from HelperFunc import getFinalWellDate, getTimeNowText, resource_path, checkInputFile, readLocalFile, writeLocalFile
 from ConvertLithoLAS import convert_Litho_LAS
+from DSG_CONFIG_WINDOW import openDsgConfig
+import settings
 
 try:
     import pyi_splash  # type: ignore
@@ -21,7 +23,7 @@ filetypes = (
 )
 
 resCheckInputFile = []
-
+settings.init()
 
 def change_check_value():
     if (converted_checked.get() == 0):
@@ -82,6 +84,9 @@ def convertROPToLas():
 
 
 def browseFile():
+    if (settings.counter > 1):
+        messagebox.showerror('Error', 'Please close DSG Config window first')
+        return
     # open-file dialog
     filename = filedialog.askopenfilename(
         title='Select a file...',
@@ -93,6 +98,7 @@ def browseFile():
         global resCheckInputFile
         resCheckInputFile = checkInputFile(filename)
         convertedCheckBtn.config(state="disabled")
+        dsgConfigBtn.config(state="disabled")
         converted_checked.set(0)
         start_depth_entry.config(state="disabled")
         start_depth.set('')
@@ -103,6 +109,7 @@ def browseFile():
             convertLithoPercentBtn.config(state="disabled")
             convertROPBtn.config(state="disabled")
             convertedCheckBtn.config(state="disabled")
+            dsgConfigBtn.config(state="disabled")
             converted_checked.set(0)
             start_depth_entry.config(state="disabled")
             start_depth.set('')
@@ -111,11 +118,13 @@ def browseFile():
             convertLithoBtn.config(state="disabled")
             convertROPBtn.config(state="disabled")
             convertedCheckBtn.config(state="normal")
+            dsgConfigBtn.config(state="normal")
         if resCheckInputFile[0] == 'ROP':
             convertROPBtn.config(state="normal")
             convertLithoPercentBtn.config(state="disabled")
             convertLithoBtn.config(state="disabled")
             convertedCheckBtn.config(state="disabled")
+            dsgConfigBtn.config(state="disabled")
             converted_checked.set(0)
             start_depth_entry.config(state="disabled")
             start_depth.set('')
@@ -125,6 +134,7 @@ def browseFile():
             convertLithoPercentBtn.config(state="disabled")
             convertROPBtn.config(state="disabled")
             convertedCheckBtn.config(state="disabled")
+            dsgConfigBtn.config(state="disabled")
             converted_checked.set(0)
             start_depth_entry.config(state="disabled")
             start_depth.set('')
@@ -141,6 +151,7 @@ def browseFile():
         convertLithoPercentBtn.config(state="disabled")
         convertROPBtn.config(state="disabled")
         convertedCheckBtn.config(state="disabled")
+        dsgConfigBtn.config(state="disabled")
         converted_checked.set(0)
         start_depth_entry.config(state="disabled")
         start_depth.set('')
@@ -258,6 +269,11 @@ start_depth_entry = Entry(root, textvariable=start_depth,
                           background='#fff', borderwidth=2, relief="ridge", font=('Arial', 12, 'bold'))
 start_depth_entry.place(x=630, y=5, width=55, height=35)
 start_depth_entry.config(state="disabled")
+
+dsgConfigBtn = Button(root, text="DSG Config", background='#633192', foreground='#faebd7', borderwidth=2, relief="raised", padx=5, pady=5,
+                      command=openDsgConfig)
+dsgConfigBtn.place(x=690, y=5, width=70, height=35)
+# dsgConfigBtn.config(state='disabled')
 
 saveBtn = Button(root, text="Save File", background='#633192', foreground='#faebd7', borderwidth=2, relief="raised", padx=5, pady=5,
                  command=saveFile)
