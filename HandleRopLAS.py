@@ -48,8 +48,9 @@ def gen_ROP_LAS(filename):
 
     writeLocalFile(resource_path('draft.las'), finalData)
 
-    finalFileName = f'{las.well.WELL.value}_ROP-DSG_{las.well.DATE.value}'
-    writeLocalFile(resource_path(f'out\\{finalFileName}.las'), finalData)
+    finalFileNameLas = f'{las.well.WELL.value}_ROP-DSG_GRAVITAS_{las.well.DATE.value}'
+    finalFileNameXlsx = f'{las.well.WELL.value}_ROP-DSG_{las.well.DATE.value}'
+    writeLocalFile(resource_path(f'out\\{finalFileNameLas}.las'), finalData)
 
     wb = Workbook()
     ws1 = wb.active
@@ -84,4 +85,4 @@ def gen_ROP_LAS(filename):
 
     ws1.freeze_panes = ws1['A2']
 
-    wb.save(resource_path(f'out\\{finalFileName}.xlsx'))
+    wb.save(resource_path(f'out\\{finalFileNameXlsx}.xlsx'))
