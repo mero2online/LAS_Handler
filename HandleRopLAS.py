@@ -86,3 +86,34 @@ def gen_ROP_LAS(filename):
     ws1.freeze_panes = ws1['A2']
 
     wb.save(resource_path(f'out\\{finalFileNameXlsx}.xlsx'))
+
+    depth = list(las['DEPTH'])
+    rop = list(las['ROP5_ML'])
+
+    rangeToAdd = int(depth[0] % 100/5-1)
+    start = int("{:.0f}".format(depth[0]/100))*100
+    for i in range(rangeToAdd):
+        valueToInsert = start + (i+1)*5
+        depth.insert(i, float(valueToInsert))
+        rop.insert(i, '')
+
+    depthChunks = [depth[i:i + 20] for i in range(0, len(depth), 20)]
+    ropChunks = [rop[i:i + 20] for i in range(0, len(rop), 20)]
+    ropChunksSheets = [ropChunks[i:i + 10]
+                       for i in range(0, len(ropChunks), 10)]
+
+    wbDT = Workbook()
+
+    for i, v in enumerate(ropChunksSheets):
+        toDepth = start + (i+1)*1000
+        fromDepth = toDepth-1000
+        ws2Title = f'{fromDepth}-{toDepth}'
+        wbDT.create_sheet(title=ws2Title)
+        ws2 = wbDT[ws2Title]
+        for c_idx, col in enumerate(v, 1):
+            for r_idx, value in enumerate(col, 1):
+                ws2.cell(row=r_idx, column=c_idx, value=value)
+
+    std = wbDT.get_sheet_by_name('Sheet')
+    wbDT.remove_sheet(std)
+    wbDT.save(resource_path(f'out\\{las.well.WELL.value}_DRILL_TIME.xlsx'))
