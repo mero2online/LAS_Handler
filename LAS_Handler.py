@@ -204,6 +204,7 @@ def clearFiles():
     writeLocalFile(resource_path('draft.las'), '')
     writeLocalFile(resource_path('draft_DSG.las'), '')
     writeLocalFile(resource_path('draft_LITHOLOGY.las'), '')
+    writeLocalFile(resource_path('draft_lithology_draft.las'), '')
     writeLocalFile(resource_path('draft.txt'), '')
     if (os.path.exists(resource_path('out'))):
         shutil.rmtree(resource_path('out\\'))

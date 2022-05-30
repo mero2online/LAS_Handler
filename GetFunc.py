@@ -1,3 +1,5 @@
+import math
+
 def GET_LITHO_DATA(litho, lithoValue):
     arr = list(litho)
     for x in range(len(arr)):
@@ -18,7 +20,7 @@ def GET_LITHO_EMPTY(litho):
 def convertNULL(litho):
     arr = list(litho)
     for x in range(len(arr)):
-        if arr[x] == -999.2500:
+        if math.isnan(arr[x]):
             arr[x] = 0
         else:
             arr[x] = arr[x]

@@ -32,14 +32,27 @@ def gen_litho_Percent_LAS(filename, start_depth):
 
     # Remove Unused Curves
     for idx, x in enumerate(las.keys()):
-        if (idx == 21 or idx == 29 or idx == 30 or idx == 31 or idx == 32 or idx == 33):
+        res = convertNULL(las[x])
+        las.delete_curve(x)
+        las.append_curve(x, res, descr=x)
+
+    for idx, x in enumerate(las.keys()):
+        if (idx == 21 or idx == 29):
+            las.delete_curve(x)
+
+    las.write(resource_path('draft_lithology_draft.las'),
+              fmt='%.0f', len_numeric_field=5)
+
+    for idx, x in enumerate(las.keys()):
+        if (idx == 28 or idx == 29 or idx == 30 or idx == 31):
             las.delete_curve(x)
 
     # Convert NULL values and delete curve then append it
     for idx, x in enumerate(las.keys()):
-        res = convertNULL(las[x])
+        res = las[x]
         las.delete_curve(x)
-        las.append_curve(newPerCurves[idx], res, descr=newPerCurves[idx])
+        las.append_curve(newPerCurves[idx],
+                         res, descr=newPerCurves[idx])
 
     firstRow = ' '.join(las.keys())
     lasFilename = resource_path('draft.las')
@@ -50,9 +63,9 @@ def gen_litho_Percent_LAS(filename, start_depth):
     las.to_excel(excelFilename)
     las.to_csv(csvFilename, units=False, delimiter='\t')
     csvDraft = readLocalFile(csvFilename)
-    csvDraftWitoutDecimal = csvDraft.replace('.0', '')
+    csvDraftWithoutDecimal = csvDraft.replace('.0', '')
     writeLocalFile(resource_path(
-        f'out\\DSG_FOR_GRAVITAS_CONVERTER.txt'), csvDraftWitoutDecimal)
+        f'out\\DSG_FOR_GRAVITAS_CONVERTER.txt'), csvDraftWithoutDecimal)
 
     DSG()
     LITHOLOGY()
@@ -302,6 +315,7 @@ def DSG():
 
 def LITHOLOGY():
     las = lasio.read(resource_path('draft.las'))
+    lasLithology = lasio.read(resource_path('draft_lithology_draft.las'))
     newLas = lasio.LASFile()
     newLas.add_curve('DEPTH', las['DEPTH'], unit='ft', descr='1 Hole Depth')
 
@@ -310,8 +324,8 @@ def LITHOLOGY():
             newLas.add_curve(newPerLithCurves[idx]['name'], las[modPerCurves[idx]],
                              unit='%', descr=newPerLithCurves[idx]['desc'])
         else:
-            newLas.add_curve(newPerLithCurves[idx]['name'], GET_LITHO_EMPTY(
-                las['DEPTH']), unit='%', descr=newPerLithCurves[idx]['desc'])
+            newLas.add_curve(newPerLithCurves[idx]['name'],
+                             lasLithology[lasLithology.keys()[idx+8]], unit='%', descr=newPerLithCurves[idx]['desc'])
 
     lasFilename = resource_path('draft_LITHOLOGY.las')
     excelFilename = resource_path('draft_LITHOLOGY.xlsx')
