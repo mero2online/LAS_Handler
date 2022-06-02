@@ -319,6 +319,12 @@ def LITHOLOGY():
     newLas = lasio.LASFile()
     newLas.add_curve('DEPTH', las['DEPTH'], unit='ft', descr='1 Hole Depth')
 
+    # Fix depth in header with half values
+    lasData = las['DEPTH']
+    las.delete_curve('DEPTH')
+    las.insert_curve(0, 'DEPTH', lasData, unit='ft', descr='1 Hole Depth')
+    las.write(resource_path('draft.las'), fmt='%.0f', len_numeric_field=5)
+
     for idx, x in enumerate(newPerLithCurves):
         if idx <= 19:
             newLas.add_curve(newPerLithCurves[idx]['name'], las[modPerCurves[idx]],
