@@ -90,8 +90,8 @@ def gen_ROP_LAS(filename):
     depth = list(las['DEPTH'])
     rop = list(las['ROP5_ML'])
 
-    rangeToAdd = int(depth[0] % 100/5-1)
-    start = int("{:.0f}".format(depth[0]/100))*100
+    rangeToAdd = int(depth[0] % 1000/5-1)
+    start = int("{:.0f}".format(depth[0]/1000))*1000
     for i in range(rangeToAdd):
         valueToInsert = start + (i+1)*5
         depth.insert(i, float(valueToInsert))
