@@ -102,11 +102,21 @@ def gen_ROP_LAS(filename):
     ropChunksSheets = [ropChunks[i:i + 10]
                        for i in range(0, len(ropChunks), 10)]
 
+    rightCol = []
+    rightCol.append('')
+    for idx in range(1, 21, 1):
+        rightCol.append(f'{idx*5-5}-{idx*5}')
+    for idx, v in enumerate(ropChunksSheets):
+        ropChunksSheets[idx].insert(0, rightCol)
+
     wbDT = Workbook()
 
     for i, v in enumerate(ropChunksSheets):
         toDepth = start + (i+1)*1000
         fromDepth = toDepth-1000
+        for idx, m in enumerate(v):
+            if idx > 0:
+                m.insert(0, fromDepth+((idx-1)*100))
         ws2Title = f'{fromDepth}-{toDepth}'
         wbDT.create_sheet(title=ws2Title)
         ws2 = wbDT[ws2Title]
