@@ -70,4 +70,4 @@ def gen_litho_LAS(filename):
         else:
             ws1.append([int(x) for x in row.split()])
     
-    wb.save(resource_path(f'out\\{finalFileName}.xlsx'))
+    wb.save(resource_path(f'out\\{finalFileName}_(DO_NOT_SEND).xlsx'))
