@@ -25,6 +25,7 @@ filetypes = (
 resCheckInputFile = []
 settings.init()
 
+
 def change_check_value():
     if (converted_checked.get() == 0):
         start_depth.set('')
@@ -83,6 +84,15 @@ def convertROPToLas():
     saveBtn.config(state='normal')
 
 
+def convertDRILLToLas():
+    convert_Litho_LAS('DRILL')
+
+    txt = readLocalFile(resource_path('draft.las'))
+    addText(txt)
+
+    saveBtn.config(state='normal')
+
+
 def browseFile():
     if (settings.counter > 1):
         messagebox.showerror('Error', 'Please close DSG Config window first')
@@ -113,14 +123,27 @@ def browseFile():
             converted_checked.set(0)
             start_depth_entry.config(state="disabled")
             start_depth.set('')
+            convertDRILLBtn.config(state="disable")
         if resCheckInputFile[0] == 'LITHO%':
             convertLithoPercentBtn.config(state="normal")
             convertLithoBtn.config(state="disabled")
             convertROPBtn.config(state="disabled")
             convertedCheckBtn.config(state="normal")
             dsgConfigBtn.config(state="normal")
+            convertDRILLBtn.config(state="disable")
         if resCheckInputFile[0] == 'ROP':
             convertROPBtn.config(state="normal")
+            convertLithoPercentBtn.config(state="disabled")
+            convertLithoBtn.config(state="disabled")
+            convertedCheckBtn.config(state="disabled")
+            dsgConfigBtn.config(state="disabled")
+            converted_checked.set(0)
+            start_depth_entry.config(state="disabled")
+            start_depth.set('')
+            convertDRILLBtn.config(state="disable")
+        if resCheckInputFile[0] == 'DRILL':
+            convertDRILLBtn.config(state="normal")
+            convertROPBtn.config(state="disabled")
             convertLithoPercentBtn.config(state="disabled")
             convertLithoBtn.config(state="disabled")
             convertedCheckBtn.config(state="disabled")
@@ -133,6 +156,7 @@ def browseFile():
             convertLithoBtn.config(state="disabled")
             convertLithoPercentBtn.config(state="disabled")
             convertROPBtn.config(state="disabled")
+            convertDRILLBtn.config(state="disable")
             convertedCheckBtn.config(state="disabled")
             dsgConfigBtn.config(state="disabled")
             converted_checked.set(0)
@@ -150,6 +174,7 @@ def browseFile():
         convertLithoBtn.config(state="disabled")
         convertLithoPercentBtn.config(state="disabled")
         convertROPBtn.config(state="disabled")
+        convertDRILLBtn.config(state="disable")
         convertedCheckBtn.config(state="disabled")
         dsgConfigBtn.config(state="disabled")
         converted_checked.set(0)
@@ -205,6 +230,7 @@ def clearFiles():
     writeLocalFile(resource_path('draft_DSG.las'), '')
     writeLocalFile(resource_path('draft_LITHOLOGY.las'), '')
     writeLocalFile(resource_path('draft_lithology_draft.las'), '')
+    writeLocalFile(resource_path('draft_drill.las'), '')
     writeLocalFile(resource_path('draft.txt'), '')
     if (os.path.exists(resource_path('out'))):
         shutil.rmtree(resource_path('out\\'))
@@ -239,41 +265,46 @@ browseBtn = Button(root, text="Browse File", background='#633192', foreground='#
                    command=browseFile)
 browseBtn.place(x=5, y=5, width=100, height=37)
 
+convertDRILLBtn = Button(root, text="Convert DRILL", background='#3c0470', foreground='#faebd7', borderwidth=2, relief="groove", padx=5, pady=5,
+                         command=convertDRILLToLas)
+convertDRILLBtn.place(x=110, y=5, width=100, height=35)
+convertDRILLBtn.config(state="disabled")
+
 convertROPBtn = Button(root, text="Convert ROP", background='#3c0470', foreground='#faebd7', borderwidth=2, relief="groove", padx=5, pady=5,
                        command=convertROPToLas)
-convertROPBtn.place(x=110, y=5, width=100, height=35)
+convertROPBtn.place(x=215, y=5, width=100, height=35)
 convertROPBtn.config(state="disabled")
 
 convertLithoBtn = Button(root, text="Convert Litho", background='#3c0470', foreground='#faebd7', borderwidth=2, relief="groove", padx=5, pady=5,
                          command=convertLithoToLas)
-convertLithoBtn.place(x=215, y=5, width=100, height=35)
+convertLithoBtn.place(x=320, y=5, width=100, height=35)
 convertLithoBtn.config(state="disabled")
 
 convertLithoPercentBtn = Button(root, text="Convert Litho %", background='#3c0470', foreground='#faebd7', borderwidth=2, relief="groove", padx=5, pady=5,
                                 command=convertLithoPercentToLas)
-convertLithoPercentBtn.place(x=320, y=5, width=115, height=35)
+convertLithoPercentBtn.place(x=425, y=5, width=115, height=35)
 convertLithoPercentBtn.config(state="disabled")
 
 converted_checked = IntVar()
 convertedCheckBtn = Checkbutton(root, text="Converted", variable=converted_checked,
                                 background='#633192', pady=20, padx=20, borderwidth=2, relief="ridge", command=change_check_value)
-convertedCheckBtn.place(x=440, y=5, width=100, height=35)
+convertedCheckBtn.place(x=545, y=5, width=100, height=35)
 convertedCheckBtn.config(state="disabled")
 
 start_depth_label = Label(root, text='Start Depth',
                           background='#633192', foreground='#faebd7')
-start_depth_label.place(x=545, y=5, width=80, height=35)
+start_depth_label.place(x=650, y=5, width=80, height=35)
 
 start_depth = StringVar()
 start_depth.trace('w', limitSizeDepth)
 start_depth_entry = Entry(root, textvariable=start_depth,
                           background='#fff', borderwidth=2, relief="ridge", font=('Arial', 12, 'bold'))
-start_depth_entry.place(x=630, y=5, width=55, height=35)
+start_depth_entry.place(x=735, y=5, width=55, height=35)
 start_depth_entry.config(state="disabled")
 
 dsgConfigBtn = Button(root, text="DSG Config", background='#633192', foreground='#faebd7', borderwidth=2, relief="raised", padx=5, pady=5,
                       command=openDsgConfig)
-dsgConfigBtn.place(x=690, y=5, width=70, height=35)
+dsgConfigBtn.place(x=795, y=5, width=70, height=35)
 # dsgConfigBtn.config(state='disabled')
 
 saveBtn = Button(root, text="Save File", background='#633192', foreground='#faebd7', borderwidth=2, relief="raised", padx=5, pady=5,
@@ -297,7 +328,12 @@ txtbox.grid(row=0, column=0, columnspan=4, sticky=E+W+N+S)
 madeWithLoveBy = Label(
     group1, text='Made with ❤ by Mohamed Omar', background='#633192', foreground='#faebd7',
     font=('monospace', 9, 'bold'))
-madeWithLoveBy.grid(row=1, column=3, padx=5, pady=5, sticky=W)
+madeWithLoveBy.grid(row=1, column=1, padx=5, pady=5, sticky=W)
+
+versionNo = Label(
+    group1, text='v.1.4.2', background='#633192', foreground='#faebd7',
+    font=('monospace', 9, 'bold'))
+versionNo.grid(row=1, column=2, padx=5, pady=5, sticky=W)
 
 root.title('LAS_Handler')
 root.geometry('1100x500')

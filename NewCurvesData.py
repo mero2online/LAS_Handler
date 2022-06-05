@@ -305,3 +305,121 @@ newPerCurvesDSG = [
         "desc": "26 Unknown",
     },
 ]
+
+newDrillCurves = [
+    {
+        "name": "DEPTH",
+        "desc": "Depth",
+        "unit":"FT"
+    },
+    {
+        "name": "DEPTH_ORIG",
+        "desc": "Depth Original Measured",
+        "unit":"FT"
+    },
+    {
+        "name": "BIT_SIZE",
+        "desc": "Bit Size",
+        "unit":"INS"
+    },
+    {
+        "name": "FLWPMPS",
+        "desc": "Flowrate Mud Pumps",
+        "unit":"GAL(U.S.)/MIN"
+    },
+    {
+        "name": "FLWOUT",
+        "desc": "Mud Flow Out",
+        "unit":"GAL(U.S.)/MIN"
+    },
+    {
+        "name": "TEMP_MUD_IN",
+        "desc": "Mud Temperature In",
+        "unit":"DEGF"
+    },
+    {
+        "name": "TEMP_MUD_OUT",
+        "desc": "Mud Temperature Out",
+        "unit":"DEGF"
+    },
+    {
+        "name": "RHO_MUD_IN",
+        "desc": "Mud Density IN",
+        "unit":"LBCF"
+    },
+    {
+        "name": "RHO_MUD_OUT",
+        "desc": "Mud Density Out",
+        "unit":"LBCF"
+    },
+    {
+        "name": "ROP",
+        "desc": "Rate Of Penetration",
+        "unit":"FT/HR"
+    },
+    {
+        "name": "RPM",
+        "desc": "Revolution Per Minute",
+        "unit":"RPM"
+    },
+    {
+        "name": "RPMTI",
+        "desc": "TOP DRIVE RPM",
+        "unit":"RPM"
+    },
+    {
+        "name": "RPMMI",
+        "desc": "MUD MOTOR RPM",
+        "unit":"RPM"
+    },
+    {
+        "name": "TORQUE",
+        "desc": "Tourqe",
+        "unit":"KPOUNDF*FT"
+    },
+    {
+        "name": "WOB",
+        "desc": "Weight On Bit",
+        "unit":"KLBF"
+    },
+    {
+        "name": "HKLI",
+        "desc": "Hookload",
+        "unit":"KLBF"
+    },
+    {
+        "name": "SPP",
+        "desc": "standpipe pressure",
+        "unit":"PSI"
+    },
+    {
+        "name": "COND_MUD_IN",
+        "desc": "Conductivity In",
+        "unit":"OHMM"
+    },
+    {
+        "name": "COND_MUD_OUT",
+        "desc": "Conductivity Out",
+        "unit":"OHMM"
+    },
+    {
+        "name": "TOTAL_PIT_VOL",
+        "desc": "Total Pit Volume",
+        "unit":"BBLS"
+    },
+    {
+        "name": "CO2",
+        "desc": "Carbon Dioxide",
+        "unit":"PPM"
+    },
+    {
+        "name": "H2S",
+        "desc": "Hydrogen Sulphide",
+        "unit":"PPM"
+    },
+    {
+        "name": "LAG_TIME",
+        "desc": "Lagged Sample Time",
+        "unit":"MINS"
+    },
+]
