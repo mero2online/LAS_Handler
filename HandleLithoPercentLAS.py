@@ -299,7 +299,7 @@ def DSG():
         for idx, cell in enumerate(ws2[col_letter]):
             cell.alignment = cellAlignment
 
-    finalFileNameXlsx = f'{las.well.WELL.value}_LITHOLOGY-DSG_GRAVITAS_{las.well.DATE.value}'
+    finalFileNameXlsx = f'{las.well.WELL.value}_LITHOLOGY-DSG_{las.well.DATE.value}'
     finalFileNameLas = f'{las.well.WELL.value}_LITHOLOGY-DSG_{las.well.DATE.value}'
     # workbook.save(excelFilename)
     workbook.save(resource_path(f'out\\{finalFileNameXlsx}.xlsx'))

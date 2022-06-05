@@ -48,8 +48,8 @@ def gen_ROP_LAS(filename):
 
     writeLocalFile(resource_path('draft.las'), finalData)
 
-    finalFileNameLas = f'{las.well.WELL.value}_ROP-DSG_GRAVITAS_{las.well.DATE.value}'
-    finalFileNameXlsx = f'{las.well.WELL.value}_ROP-DSG_{las.well.DATE.value}'
+    finalFileNameLas = f'{las.well.WELL.value}_ROP-DSG_{las.well.DATE.value}'
+    finalFileNameXlsx = f'{las.well.WELL.value}_ROP_{las.well.DATE.value}_GRAVITAS'
     writeLocalFile(resource_path(f'out\\{finalFileNameLas}.las'), finalData)
 
     wb = Workbook()
