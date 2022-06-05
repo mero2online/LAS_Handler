@@ -65,7 +65,7 @@ def gen_litho_Percent_LAS(filename, start_depth):
     csvDraft = readLocalFile(csvFilename)
     csvDraftWithoutDecimal = csvDraft.replace('.0', '')
     writeLocalFile(resource_path(
-        f'out\\DSG_FOR_GRAVITAS_CONVERTER.txt'), csvDraftWithoutDecimal)
+        f'out\\DSG_FOR_GRAVITAS_CONVERTER_(DO_NOT_SEND).txt'), csvDraftWithoutDecimal)
 
     DSG()
     LITHOLOGY()
@@ -74,7 +74,7 @@ def gen_litho_Percent_LAS(filename, start_depth):
 
     lithology_gravitas_name = f'{finalWellName}_LITHOLOGY_{finalWellDate}_GRAVITAS'
     shutil.copy(resource_path('draft.las'), resource_path(
-        f'out\\{lithology_gravitas_name}.las'))
+        f'out\\{lithology_gravitas_name}_(DO_NOT_SEND).las'))
 
     lasDraft = readLocalFile(lasFilename)
     lasDraftSplitted = lasDraft.splitlines()
@@ -161,7 +161,7 @@ def LITHOLOGY_GRAVITAS_Converted(lasFilename, finalWellName, finalWellDate, star
 
     for row in result:
         ws1.append(row)
-    wb.save(resource_path(f'out\\{finalFileName}.xlsx'))
+    wb.save(resource_path(f'out\\{finalFileName}_(DO_NOT_SEND).xlsx'))
 
     df = DataFrame(ws1.values)
     df.to_csv(resource_path(f'out\\{finalFileName}.txt'),
@@ -352,8 +352,9 @@ def LITHOLOGY():
     textThreeLas = lith[lith.find(startThree)+len(startThree):len(lith)-1]
     finalData = f'{text1}{textOneLas}{text4}{textTwoLas}{text5}{textThreeLas}'
 
-    finalFileName = f'{las.well.WELL.value}_LITHOLOGY_{las.well.DATE.value}'
-    writeLocalFile(resource_path(f'out\\{finalFileName}.las'), finalData)
+    finalFileNameLas = f'{las.well.WELL.value}_LITHOLOGY_{las.well.DATE.value}'
+    finalFileNameXlsx = f'{las.well.WELL.value}_LITHOLOGY_{las.well.DATE.value}_(DO_NOT_SEND)'
+    writeLocalFile(resource_path(f'out\\{finalFileNameLas}.las'), finalData)
 
     wb = Workbook()
     ws1 = wb.active
@@ -369,7 +370,7 @@ def LITHOLOGY():
         else:
             ws1.append([int(x) for x in row.split()])
 
-    wb.save(resource_path(f'out\\{finalFileName}.xlsx'))
+    wb.save(resource_path(f'out\\{finalFileNameXlsx}.xlsx'))
 
     trimLASandEXCEL(lasFilename, excelFilename, firstRow)
 
