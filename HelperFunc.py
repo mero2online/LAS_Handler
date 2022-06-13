@@ -32,9 +32,9 @@ def checkInputFile(filename):
             inputFileContent.append('LITHO%')
         elif las.keys() == ['DMEA', 'ROPA']:
             inputFileContent.append('ROP')
-        elif las.keys() == ['DMEA', 'DBTM', 'HDIA', 'MFII', 'MFOI', 'MTIA', 'MTOA', 'MDIA', 'MDOA',
-                            'ROPA', 'RPMI', 'RPMTI', 'RPMMI', 'TQI', 'WOBI', 'HKLI', 'SPPI',
-                            'MCIA', 'MCOA', 'TVT1', 'CO2_1', 'AH2S1', 'UD1']:
+        elif all(x in las.keys() for x in ['DMEA', 'DBTM', 'HDIA', 'MFII', 'MFOI', 'MTIA', 'MTOA', 'MDIA', 'MDOA',
+                                           'ROPA', 'RPMI', 'RPMTI', 'RPMMI', 'WOBI', 'HKLI', 'SPPI',
+                                           'MCIA', 'MCOA', 'TVT1', 'CO2_1', 'AH2S1', 'UD1']):
             inputFileContent.append('DRILL')
         else:
             inputFileContent.append('')
