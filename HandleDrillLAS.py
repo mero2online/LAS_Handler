@@ -39,7 +39,7 @@ def gen_DRILL_LAS(filename):
     endTwo = '~Params ----------------------------------------------------'
     textTwoLas = txt[txt.find(startTwo)+len(startTwo):txt.rfind(endTwo)]
 
-    startThree = '~A  DMEA        DBTM        HDIA        MFII        MFOI        MTIA        MTOA        MDIA        MDOA        ROPA        RPMI        RPMTI       RPMMI       TQI         WOBI        HKLI        SPPI        MCIA        MCOA        TVT1        CO2_1       AH2S1       UD1         '
+    startThree = 'WOBI        HKLI        SPPI        MCIA        MCOA        TVT1        CO2_1       AH2S1       UD1         '
     textThreeLas = textOriginal[textOriginal.find(startThree)+len(startThree):len(textOriginal)-1]
 
     finalData = f'{text1}{textOneLas}{text8}{textTwoLas}{text9}{textThreeLas}'
