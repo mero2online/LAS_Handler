@@ -10,6 +10,7 @@ from HelperFunc import getFinalWellDate, getTimeNowText, resource_path, checkInp
 from ConvertLithoLAS import convert_Litho_LAS
 from DSG_CONFIG_WINDOW import openDsgConfig
 import settings
+from settings import appVersionNo
 
 try:
     import pyi_splash  # type: ignore
@@ -331,7 +332,7 @@ madeWithLoveBy = Label(
 madeWithLoveBy.grid(row=1, column=1, padx=5, pady=5, sticky=W)
 
 versionNo = Label(
-    group1, text='v.1.4.3', background='#633192', foreground='#faebd7',
+    group1, text=f'v.{appVersionNo}', background='#633192', foreground='#faebd7',
     font=('monospace', 9, 'bold'))
 versionNo.grid(row=1, column=2, padx=5, pady=5, sticky=W)
 
