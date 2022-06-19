@@ -3,7 +3,7 @@ from openpyxl import Workbook
 from openpyxl.styles import Border, Side, Alignment, Font
 
 from my_const import *
-from GetFunc import *
+from GetFunc import aggregate_ROP_FiveFeet, aggregate_DEPTH_FiveFeet
 from HelperFunc import getFinalWellDate, resource_path, readLocalFile, writeLocalFile
 
 

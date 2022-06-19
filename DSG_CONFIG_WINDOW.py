@@ -16,7 +16,7 @@ def openDsgConfig():
         messagebox.showerror('Error', 'Please close opened window first')
 
 
-def getCSVDATA():
+def getCSVData():
     text = readLocalFile(f'{cwd}\LAS_Handler_DSG_Config.csv')
 
     result = []
@@ -29,12 +29,12 @@ def getCSVDATA():
 
 def saveConfig(prov, long, lati, xcoord, ycoord, elev, td, saveStatusVar):
     parameters = ['PROV', 'LONG', 'LATI', 'XCOORD', 'YCOORD', 'ELEV', 'TD']
-    valuse = [prov.get(), long.get(), lati.get(), xcoord.get(),
+    values = [prov.get(), long.get(), lati.get(), xcoord.get(),
               ycoord.get(), elev.get(), td.get()]
 
     arr = []
     for idx, x in enumerate(parameters):
-        arr.append(f'{x},{valuse[idx]}')
+        arr.append(f'{x},{values[idx]}')
 
     txt = '\n'.join(arr)
     writeLocalFile(f'{cwd}\LAS_Handler_DSG_Config.csv', txt)
@@ -49,7 +49,7 @@ def dsgConfig():
     app = Tk()
     saveStatusVar = StringVar(app, '')
 
-    result = getCSVDATA()
+    result = getCSVData()
     PROV, LONG, LATI, XCOORD, YCOORD, ELEV, TD = result
 
     prov_label = Label(app, text='PROV',

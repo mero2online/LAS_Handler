@@ -88,7 +88,7 @@ def gen_litho_Percent_LAS(filename, start_depth):
     # load the excel file
     inBook = xlrd.open_workbook(
         resource_path('LITHOLOGY_GRAVITAS.xls'), formatting_info=True, on_demand=True)
-    inSheet = inBook .sheet_by_index(0)
+    inSheet = inBook.sheet_by_index(0)
 
     # copy the contents of excel file
     outBook, outStyle = copy2(inBook)

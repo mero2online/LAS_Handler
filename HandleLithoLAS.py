@@ -2,7 +2,7 @@ import lasio
 from openpyxl import Workbook
 
 from my_const import *
-from GetFunc import *
+from GetFunc import GET_LITHO_DATA, GET_LITHO_EMPTY
 from HelperFunc import getFinalWellDate, resource_path, readLocalFile, writeLocalFile
 from NewCurvesData import newLithoCurves
 
@@ -69,5 +69,5 @@ def gen_litho_LAS(filename):
             ws1.append(two)
         else:
             ws1.append([int(x) for x in row.split()])
-    
+
     wb.save(resource_path(f'out\\{finalFileName}_(DO_NOT_SEND).xlsx'))

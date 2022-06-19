@@ -1,5 +1,6 @@
 import math
 
+
 def GET_LITHO_DATA(litho, lithoValue):
     arr = list(litho)
     for x in range(len(arr)):
@@ -203,24 +204,45 @@ def getNewPerWellDSG(result):
 
 
 def GetDSG_LAS_Header_ColorCode(idx):
-    match idx:
-        case 2:
-            return "FF00FF"
-        case 4:
-            return "548220"
-        case 9:
-            return "33CCCC"
-        case 10:
-            return "99CCCC"
-        case 14:
-            return "A6A6A6"
-        case 16:
-            return "FF6600"
-        case 17:
-            return "FFFF00"
-        case _:
-            return ""
+    if idx == 2:
+        return "FF00FF"
+    elif idx == 4:
+        return "548220"
+    elif idx == 9:
+        return "33CCCC"
+    elif idx == 10:
+        return "99CCCC"
+    elif idx == 14:
+        return "A6A6A6"
+    elif idx == 16:
+        return "FF6600"
+    elif idx == 17:
+        return "FFFF00"
+    else:
+        return ""
 
 
 def GetDSG_LAS_Header(well, curves):
-    return f'~Version Information\n VERS.                  2.0:   CWLS log ASCII Standard -VERSION 2.0\n WRAP.                   NO:   One line per depth step\n\n~Well Information Block\n#MNEM.UNIT     VALUE/NAME     DESCRIPTION\n#---------     -----------    ---------------------------\n{well}\n~Parameter Information Block\n#MNEM.UNIT       Value        Description\n#---------     -----------    ---------------------------\n\nTAPE_NAME. UNK. Las:\nTool_SREING.              UNKNOWN:\nWN   .        UNK: FIELD NAME\nPROJECT.                  :\nSET   .   MUDLOG_LITHOLOGY: \n\n~Curve Information Block\n#MNEM.UNIT                 API CODE     Curve Description\n#---------               -----------    ---------------------------\n{curves}\n'
+    return f'''~Version Information
+ VERS.                  2.0:   CWLS log ASCII Standard -VERSION 2.0
+ WRAP.                   NO:   One line per depth step
+
+~Well Information Block
+#MNEM.UNIT     VALUE/NAME     DESCRIPTION
+#---------     -----------    ---------------------------
+{well}
+~Parameter Information Block
+#MNEM.UNIT       Value        Description
+#---------     -----------    ---------------------------
+
+TAPE_NAME. UNK. Las:
+Tool_SREING.              UNKNOWN:
+WN   .        UNK: FIELD NAME
+PROJECT.                  :
+SET   .   MUDLOG_LITHOLOGY: 
+
+~Curve Information Block
+#MNEM.UNIT                 API CODE     Curve Description
+#---------               -----------    ---------------------------
+{curves}
+'''

@@ -1,7 +1,6 @@
 import lasio
 
 from my_const import *
-from GetFunc import *
 from HelperFunc import getFinalWellDate, resource_path, readLocalFile, writeLocalFile
 from NewCurvesData import newDrillCurves
 
