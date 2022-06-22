@@ -374,7 +374,7 @@ newDrillCurves = [
     },
     {
         "name": "TORQUE",
-        "desc": "Torque",
+        "desc": "Tourqe",
         "unit": "KPOUNDF*FT"
     },
     {
@@ -421,5 +421,142 @@ newDrillCurves = [
         "name": "LAG_TIME",
         "desc": "Lagged Sample Time",
         "unit": "MINS"
+    },
+]
+newGasCurves = [
+    {
+        "name": "DEPTH",
+        "desc": " 1 Hole Depth",
+        "unit": "ft"
+    },
+    {
+        "name": "MUDGAS_C1",
+        "desc": " 2 Delta Methane",
+        "unit": "ppm"
+    },
+    {
+        "name": "MUDGAS_C1_IN",
+        "desc": " 3 Methane In",
+        "unit": "ppm"
+    },
+    {
+        "name": "MUDGAS_C1_OUT",
+        "desc": " 4 Methane Out",
+        "unit": "ppm"
+    },
+    {
+        "name": "MUDGAS_C2",
+        "desc": " 5 Delta Ethane",
+        "unit": "ppm"
+    },
+    {
+        "name": "MUDGAS_C2_IN",
+        "desc": " 6 Ethane In",
+        "unit": "ppm"
+    },
+    {
+        "name": "MUDGAS_C2_OUT",
+        "desc": " 7 Ethane Out",
+        "unit": "ppm"
+    },
+    {
+        "name": "MUDGAS_C3",
+        "desc": " 8 Delta Propane",
+        "unit": "ppm"
+    },
+    {
+        "name": "MUDGAS_C3_IN",
+        "desc": " 9 Propane In",
+        "unit": "ppm"
+    },
+    {
+        "name": "MUDGAS_C3_OUT",
+        "desc": "10 Propane Out",
+        "unit": "ppm"
+    },
+    {
+        "name": "MUDGAS_IC4",
+        "desc": "11 Delta Iso-Butane",
+        "unit": "ppm"
+    },
+    {
+        "name": "MUDGAS_IC4_IN",
+        "desc": "12 Iso-Butane In",
+        "unit": "ppm"
+    },
+    {
+        "name": "MUDGAS_IC4_OUT",
+        "desc": "13 Iso-Butane Out",
+        "unit": "ppm"
+    },
+    {
+        "name": "MUDGAS_NC4",
+        "desc": "14 Delta N-Butane",
+        "unit": "ppm"
+    },
+    {
+        "name": "MUDGAS_NC4_IN",
+        "desc": "15 N-Butane In",
+        "unit": "ppm"
+    },
+    {
+        "name": "MUDGAS_NC4_OUT",
+        "desc": "16 N-Butane Out",
+        "unit": "ppm"
+    },
+    {
+        "name": "MUDGAS_IC5",
+        "desc": "17 Delta Iso-Pentane",
+        "unit": "ppm"
+    },
+    {
+        "name": "MUDGAS_IC5_IN",
+        "desc": "18 Iso-Pentane In",
+        "unit": "ppm"
+    },
+    {
+        "name": "MUDGAS_IC5_OUT",
+        "desc": "19 Iso-Pentane Out",
+        "unit": "ppm"
+    },
+    {
+        "name": "MUDGAS_NC5",
+        "desc": "20 Delta N-Pentane",
+        "unit": "ppm"
+    },
+    {
+        "name": "MUDGAS_NC5_IN",
+        "desc": "21 N-Pentane In",
+        "unit": "ppm"
+    },
+    {
+        "name": "MUDGAS_NC5_OUT",
+        "desc": "22 N-Pentane Out",
+        "unit": "ppm"
+    },
+    {
+        "name": "MUDGAS_HYDC",
+        "desc": "23 Hydrocarbons",
+        "unit": "ppm"
+    },
+    {
+        "name": "MUDGAS_HYDC_IN",
+        "desc": "24 Hydrocarbons In",
+        "unit": "ppm"
+    },
+    {
+        "name": "MUDGAS_HYDC_OUT",
+        "desc": "25 Hydrocarbons Out",
+        "unit": "ppm"
+    },
+    {
+        "name": "MUDGAS_TGAS_HOT",
+        "desc": "26 Hydrocarbons",
+        "unit": "ppm"
+    },
+    {
+        "name": "MUDGAS_CO2",
+        "desc": "27 Carbon dioxide OUT",
+        "unit": "ppm"
     },
 ]
