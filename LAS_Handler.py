@@ -93,6 +93,7 @@ def convertDRILLToLas():
 
     saveBtn.config(state='normal')
 
+
 def convertGASToLas():
     convert_Litho_LAS('GAS')
 
@@ -100,6 +101,7 @@ def convertGASToLas():
     addText(txt)
 
     saveBtn.config(state='normal')
+
 
 def browseFile():
     if (settings.counter > 1):
@@ -112,101 +114,52 @@ def browseFile():
 
     clearFiles()
     if (filename):
-        selectedFilePath.set(filename)
         global resCheckInputFile
         resCheckInputFile = checkInputFile(filename)
-        convertedCheckBtn.config(state="disabled")
-        dsgConfigBtn.config(state="disabled")
-        converted_checked.set(0)
-        start_depth_entry.config(state="disabled")
-        start_depth.set('')
-        saveBtn.config(state='disabled')
+        disableAllButtonsExcept('')
 
         if resCheckInputFile[0] == 'LITHO':
-            convertLithoBtn.config(state="normal")
-            convertLithoPercentBtn.config(state="disabled")
-            convertROPBtn.config(state="disabled")
-            convertedCheckBtn.config(state="disabled")
-            dsgConfigBtn.config(state="disabled")
-            converted_checked.set(0)
-            start_depth_entry.config(state="disabled")
-            start_depth.set('')
-            convertDRILLBtn.config(state="disable")
-            convertGASBtn.config(state="disable")
+            disableAllButtonsExcept([convertLithoBtn])
         if resCheckInputFile[0] == 'LITHO%':
-            convertLithoPercentBtn.config(state="normal")
-            convertLithoBtn.config(state="disabled")
-            convertROPBtn.config(state="disabled")
-            convertedCheckBtn.config(state="normal")
-            dsgConfigBtn.config(state="normal")
-            convertDRILLBtn.config(state="disable")
-            convertGASBtn.config(state="disable")
+            disableAllButtonsExcept(
+                [convertLithoPercentBtn, convertedCheckBtn, dsgConfigBtn])
         if resCheckInputFile[0] == 'ROP':
-            convertROPBtn.config(state="normal")
-            convertLithoPercentBtn.config(state="disabled")
-            convertLithoBtn.config(state="disabled")
-            convertedCheckBtn.config(state="disabled")
-            dsgConfigBtn.config(state="disabled")
-            converted_checked.set(0)
-            start_depth_entry.config(state="disabled")
-            start_depth.set('')
-            convertDRILLBtn.config(state="disable")
-            convertGASBtn.config(state="disable")
+            disableAllButtonsExcept([convertROPBtn])
         if resCheckInputFile[0] == 'DRILL':
-            convertDRILLBtn.config(state="normal")
-            convertROPBtn.config(state="disabled")
-            convertLithoPercentBtn.config(state="disabled")
-            convertLithoBtn.config(state="disabled")
-            convertedCheckBtn.config(state="disabled")
-            dsgConfigBtn.config(state="disabled")
-            converted_checked.set(0)
-            start_depth_entry.config(state="disabled")
-            start_depth.set('')
-            convertGASBtn.config(state="disable")
+            disableAllButtonsExcept([convertDRILLBtn])
         if resCheckInputFile[0] == 'GAS':
-            convertGASBtn.config(state="normal")
-            convertDRILLBtn.config(state="disabled")
-            convertROPBtn.config(state="disabled")
-            convertLithoPercentBtn.config(state="disabled")
-            convertLithoBtn.config(state="disabled")
-            convertedCheckBtn.config(state="disabled")
-            dsgConfigBtn.config(state="disabled")
-            converted_checked.set(0)
-            start_depth_entry.config(state="disabled")
-            start_depth.set('')
+            disableAllButtonsExcept([convertGASBtn])
         if resCheckInputFile[0] == '':
             addText('')
-            convertLithoBtn.config(state="disabled")
-            convertLithoPercentBtn.config(state="disabled")
-            convertROPBtn.config(state="disabled")
-            convertDRILLBtn.config(state="disable")
-            convertGASBtn.config(state="disable")
-            convertedCheckBtn.config(state="disabled")
-            dsgConfigBtn.config(state="disabled")
-            converted_checked.set(0)
-            start_depth_entry.config(state="disabled")
-            start_depth.set('')
+            disableAllButtonsExcept('')
             messagebox.showerror('File error', 'Please load valid LAS file')
-            selectedFilePath.set('')
             return False
-
+        selectedFilePath.set(filename)
         txt = readLocalFile(filename)
         addText(txt)
         writeLocalFile(resource_path('input.las'), txt)
     else:
         addText('')
-        convertLithoBtn.config(state="disabled")
-        convertLithoPercentBtn.config(state="disabled")
-        convertROPBtn.config(state="disabled")
-        convertDRILLBtn.config(state="disable")
-        convertGASBtn.config(state="disable")
-        convertedCheckBtn.config(state="disabled")
-        dsgConfigBtn.config(state="disabled")
-        converted_checked.set(0)
-        start_depth_entry.config(state="disabled")
-        start_depth.set('')
-        selectedFilePath.set('')
-        saveBtn.config(state='disabled')
+        disableAllButtonsExcept('')
+
+
+def disableAllButtonsExcept(btn):
+    allBtnS = [convertLithoBtn, convertLithoPercentBtn, convertROPBtn,
+               convertDRILLBtn, convertGASBtn, convertedCheckBtn,
+               dsgConfigBtn, start_depth_entry, saveBtn,
+               start_depth, selectedFilePath, converted_checked]
+
+    for i, x in enumerate(allBtnS):
+        if type(x) == IntVar:
+            x.set(0)
+        elif type(x) == StringVar:
+            x.set('')
+        else:
+            x.config(state="disabled")
+
+    if btn != '':
+        for i, b in enumerate(btn):
+            b.config(state="normal")
 
 
 def saveFile():
@@ -250,21 +203,19 @@ def insertText(txt):
 
 
 def clearFiles():
-    writeLocalFile(resource_path('input.las'), '')
-    writeLocalFile(resource_path('draft.las'), '')
-    writeLocalFile(resource_path('draft_DSG.las'), '')
-    writeLocalFile(resource_path('draft_LITHOLOGY.las'), '')
-    writeLocalFile(resource_path('draft_lithology_draft.las'), '')
-    writeLocalFile(resource_path('draft.txt'), '')
+    lasFileNames = ['input.las', 'draft.las', 'draft_DSG.las', 'draft_LITHOLOGY.las',
+                    'draft_lithology_draft.las', 'draft.txt']
+    for x in lasFileNames:
+        writeLocalFile(resource_path(x), '')
+
+    xlsxFileNames = ['draft.xlsx', 'draft_DSG.xlsx', 'draft_LITHOLOGY.xlsx']
+    for x in xlsxFileNames:
+        if (os.path.exists(resource_path(x))):
+            os.remove(resource_path(x))
+
     if (os.path.exists(resource_path('out'))):
         shutil.rmtree(resource_path('out\\'))
     os.mkdir(resource_path('out'))
-    if (os.path.exists(resource_path('draft.xlsx'))):
-        os.remove(resource_path('draft.xlsx'))
-    if (os.path.exists(resource_path('draft_DSG.xlsx'))):
-        os.remove(resource_path('draft_DSG.xlsx'))
-    if (os.path.exists(resource_path('draft_LITHOLOGY.xlsx'))):
-        os.remove(resource_path('draft_LITHOLOGY.xlsx'))
 
 
 def copy_DSG_ConfigFile():
@@ -295,7 +246,7 @@ convertDRILLBtn.place(x=110, y=5, width=100, height=35)
 convertDRILLBtn.config(state="disabled")
 
 convertGASBtn = Button(root, text="Convert GAS", background='#3c0470', foreground='#faebd7', borderwidth=2, relief="groove", padx=5, pady=5,
-                         command=convertGASToLas)
+                       command=convertGASToLas)
 convertGASBtn.place(x=215, y=5, width=100, height=35)
 convertGASBtn.config(state="disabled")
 
