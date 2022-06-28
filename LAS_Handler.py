@@ -42,6 +42,7 @@ def convertLithoToLas():
     addText(txt)
 
     saveBtn.config(state='normal')
+    explorationCheckBtn.config(state='normal')
 
 
 def convertLithoPercentToLas():
@@ -74,6 +75,7 @@ def convertLithoPercentToLas():
     addText(txt)
 
     saveBtn.config(state='normal')
+    explorationCheckBtn.config(state='normal')
 
 
 def convertROPToLas():
@@ -83,6 +85,7 @@ def convertROPToLas():
     addText(txt)
 
     saveBtn.config(state='normal')
+    explorationCheckBtn.config(state='normal')
 
 
 def convertDRILLToLas():
@@ -92,6 +95,7 @@ def convertDRILLToLas():
     addText(txt)
 
     saveBtn.config(state='normal')
+    explorationCheckBtn.config(state='normal')
 
 
 def convertGASToLas():
@@ -101,6 +105,7 @@ def convertGASToLas():
     addText(txt)
 
     saveBtn.config(state='normal')
+    explorationCheckBtn.config(state='normal')
 
 
 def browseFile():
@@ -147,7 +152,8 @@ def disableAllButtonsExcept(btn):
     allBtnS = [convertLithoBtn, convertLithoPercentBtn, convertROPBtn,
                convertDRILLBtn, convertGASBtn, convertedCheckBtn,
                dsgConfigBtn, start_depth_entry, saveBtn,
-               start_depth, selectedFilePath, converted_checked]
+               start_depth, selectedFilePath, converted_checked,
+               exploration_checked, explorationCheckBtn]
 
     for i, x in enumerate(allBtnS):
         if type(x) == IntVar:
@@ -182,8 +188,13 @@ async def saveAllFiles(filename):
 async def copyFiles(src_files, dest_dir):
     os.mkdir(dest_dir)
     for file_name in src_files:
-        if os.path.isfile(resource_path(f'out\\{file_name}')):
-            shutil.copy(resource_path(f'out\\{file_name}'), dest_dir)
+        newFileName = file_name.replace(
+            'GRAVITAS', 'GRAFIT') if exploration_checked.get() == 1 else file_name.replace(
+            'GRAFIT', 'GRAVITAS')
+        os.rename(resource_path(f'out\\{file_name}'),
+                  resource_path(f'out\\{newFileName}'))
+        if os.path.isfile(resource_path(f'out\\{newFileName}')):
+            shutil.copy(resource_path(f'out\\{newFileName}'), dest_dir)
 
 
 def getText():
@@ -271,6 +282,12 @@ convertedCheckBtn = Checkbutton(root, text="Converted", variable=converted_check
 convertedCheckBtn.place(x=650, y=5, width=100, height=35)
 convertedCheckBtn.config(state="disabled")
 
+exploration_checked = IntVar()
+explorationCheckBtn = Checkbutton(root, text="Exploration", variable=exploration_checked,
+                                  background='#633192', pady=20, padx=20, borderwidth=2, relief="ridge", command=change_check_value)
+explorationCheckBtn.place(x=990, y=5, width=100, height=35)
+explorationCheckBtn.config(state="disabled")
+
 start_depth_label = Label(root, text='Start Depth',
                           background='#633192', foreground='#faebd7')
 start_depth_label.place(x=760, y=5, width=80, height=35)
@@ -316,7 +333,7 @@ versionNo = Label(
 versionNo.grid(row=1, column=2, padx=5, pady=5, sticky=W)
 
 root.title('LAS_Handler')
-root.geometry('1100x500')
+root.geometry('1180x500')
 root.configure(bg='#000')
 root.grid_columnconfigure(2, weight=1)
 root.grid_rowconfigure(2, weight=1)
