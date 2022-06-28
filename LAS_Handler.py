@@ -281,7 +281,7 @@ convertedCheckBtn.config(state="disabled")
 exploration_checked = IntVar()
 explorationCheckBtn = Checkbutton(root, text="Exploration", variable=exploration_checked,
                                   background='#633192', pady=20, padx=20, borderwidth=2,
-                                  relief="ridge", command=change_check_value)
+                                  relief="ridge")
 explorationCheckBtn.place(x=990, y=5, width=100, height=35)
 explorationCheckBtn.config(state="disabled")
 
