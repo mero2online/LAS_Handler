@@ -251,40 +251,37 @@ browseBtn = Button(root, text="Browse File", background='#633192', foreground='#
                    command=browseFile)
 browseBtn.place(x=5, y=5, width=100, height=37)
 
-convertDRILLBtn = Button(root, text="Convert DRILL", background='#3c0470', foreground='#faebd7', borderwidth=2, relief="groove", padx=5, pady=5,
-                         command=convertDRILLToLas)
-convertDRILLBtn.place(x=110, y=5, width=100, height=35)
-convertDRILLBtn.config(state="disabled")
+btnNamesTxt = [
+    "Convert DRILL", "Convert GAS", "Convert ROP", "Convert Litho", "Convert Litho %"
+]
+btnFunc = [
+    convertDRILLToLas, convertGASToLas, convertROPToLas,
+    convertLithoToLas, convertLithoPercentToLas
+]
+myBtnArr = []
+for i in range(5):
+    btn = Button(root, text=btnNamesTxt[i], background='#3c0470', foreground='#faebd7',
+                 borderwidth=2, relief="groove", padx=5, pady=5,
+                 command=btnFunc[i])
+    xPlace = (i*105)+110
+    wPlace = 115 if i == 4 else 100
+    btn.place(x=xPlace, y=5, width=wPlace, height=35)
+    btn.config(state="disabled")
+    myBtnArr.append(btn)
 
-convertGASBtn = Button(root, text="Convert GAS", background='#3c0470', foreground='#faebd7', borderwidth=2, relief="groove", padx=5, pady=5,
-                       command=convertGASToLas)
-convertGASBtn.place(x=215, y=5, width=100, height=35)
-convertGASBtn.config(state="disabled")
-
-convertROPBtn = Button(root, text="Convert ROP", background='#3c0470', foreground='#faebd7', borderwidth=2, relief="groove", padx=5, pady=5,
-                       command=convertROPToLas)
-convertROPBtn.place(x=320, y=5, width=100, height=35)
-convertROPBtn.config(state="disabled")
-
-convertLithoBtn = Button(root, text="Convert Litho", background='#3c0470', foreground='#faebd7', borderwidth=2, relief="groove", padx=5, pady=5,
-                         command=convertLithoToLas)
-convertLithoBtn.place(x=425, y=5, width=100, height=35)
-convertLithoBtn.config(state="disabled")
-
-convertLithoPercentBtn = Button(root, text="Convert Litho %", background='#3c0470', foreground='#faebd7', borderwidth=2, relief="groove", padx=5, pady=5,
-                                command=convertLithoPercentToLas)
-convertLithoPercentBtn.place(x=530, y=5, width=115, height=35)
-convertLithoPercentBtn.config(state="disabled")
+convertDRILLBtn, convertGASBtn, convertROPBtn, convertLithoBtn, convertLithoPercentBtn = myBtnArr
 
 converted_checked = IntVar()
 convertedCheckBtn = Checkbutton(root, text="Converted", variable=converted_checked,
-                                background='#633192', pady=20, padx=20, borderwidth=2, relief="ridge", command=change_check_value)
+                                background='#633192', pady=20, padx=20, borderwidth=2,
+                                relief="ridge", command=change_check_value)
 convertedCheckBtn.place(x=650, y=5, width=100, height=35)
 convertedCheckBtn.config(state="disabled")
 
 exploration_checked = IntVar()
 explorationCheckBtn = Checkbutton(root, text="Exploration", variable=exploration_checked,
-                                  background='#633192', pady=20, padx=20, borderwidth=2, relief="ridge", command=change_check_value)
+                                  background='#633192', pady=20, padx=20, borderwidth=2,
+                                  relief="ridge", command=change_check_value)
 explorationCheckBtn.place(x=990, y=5, width=100, height=35)
 explorationCheckBtn.config(state="disabled")
 
