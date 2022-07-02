@@ -21,12 +21,12 @@ def gen_GAS_LAS(filename):
 
     las.well.SRVC = 'EXLOG'
 
-    curvesForExcel = ['DMEA', 'GASS1', 'METH',
-                      'ETH', 'PRP', 'IBUT', 'NBUT', 'IPEN', 'NPEN']
+    curvesForExcel = [0, 22, 1, 4, 7, 10, 13, 16, 19]
     dataForExcel = []
 
     for d in curvesForExcel:
-        dataForExcel.append(las[d])
+        curveName = las.keys()[d]
+        dataForExcel.append(las[curveName])
 
     # Convert column to rows
     finalData = np.array(dataForExcel).T.tolist()
@@ -41,7 +41,9 @@ def gen_GAS_LAS(filename):
 
     style = xlwt.easyxf('borders: top_color black, bottom_color black, right_color black, left_color black,\
                               left thin, right thin, top thin, bottom thin;\
-                     align: horiz center;', num_format_str='0')
+                     align: horiz center; font: name Calibri, bold 1, height 220;', num_format_str='0')
+    # font height 200: this is font with height 10 points
+    sheet.col(0).width = 10*275
 
     for r_idx, row in enumerate(finalData):
         for c_idx, v in enumerate(row):
@@ -76,7 +78,7 @@ def gen_GAS_LAS(filename):
     endTwo = '~Params ----------------------------------------------------'
     textTwoLas = txt[txt.find(startTwo)+len(startTwo):txt.rfind(endTwo)]
 
-    startThree = '~A  DMEA        METH        METH2       METH1       ETH         ETH2        ETH1        PRP         PRP2        PRP1        IBUT        IBUT2       IBUT1       NBUT        NBUT2       NBUT1       IPEN        IPEN2       IPEN1       NPEN        NPEN2       NPEN1       GASS1       HYDC4       HYDC5       GASS        CO2_1       '
+    startThree = '        CO2_1       '
     textThreeLas = textOriginal[textOriginal.find(
         startThree)+len(startThree):len(textOriginal)-1]
 

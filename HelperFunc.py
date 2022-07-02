@@ -36,11 +36,11 @@ def checkInputFile(filename):
                                            'ROPA', 'RPMI', 'RPMTI', 'RPMMI', 'WOBI', 'HKLI', 'SPPI',
                                            'MCIA', 'MCOA', 'TVT1', 'CO2_1', 'AH2S1', 'UD1']):
             inputFileContent.append('DRILL')
-        elif las.keys() == ['DMEA', 'METH', 'METH2', 'METH1', 'ETH', 'ETH2', 'ETH1',
-                            'PRP', 'PRP2', 'PRP1', 'IBUT', 'IBUT2', 'IBUT1',
-                            'NBUT', 'NBUT2', 'NBUT1', 'IPEN', 'IPEN2', 'IPEN1',
-                            'NPEN', 'NPEN2', 'NPEN1', 'GASS1', 'HYDC4', 'HYDC5',
-                            'GASS', 'CO2_1']:
+        elif all(x in las.keys() for x in ['DMEA', 'METH', 'METH2', 'METH1', 'ETH', 'ETH2', 'ETH1',
+                                           'PRP', 'PRP2', 'PRP1', 'IBUT', 'IBUT2', 'IBUT1',
+                                           'NBUT', 'NBUT2', 'NBUT1', 'IPEN', 'IPEN2', 'IPEN1',
+                                           'NPEN', 'NPEN2', 'NPEN1', 'CO2_1']) \
+                and las.keys()[len(las.keys())-1] == 'CO2_1':
             inputFileContent.append('GAS')
         else:
             inputFileContent.append('')
