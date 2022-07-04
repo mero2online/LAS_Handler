@@ -42,9 +42,14 @@ PyInstaller.__main__.run([
 ])
 
 if platform.system() == 'Windows' and platform.release() == '10':
-    os.system(f'start {cwd}\\dist\\{inoFileNameWin10}.iss')
+    os.system(f'{cwd}\\dist\\{inoFileNameWin10}.iss')
 elif platform.system() == 'Windows' and platform.release() == '7':
-    os.system(f'start {cwd}\\dist\\{inoFileNameWin7}.iss')
+    os.system(f'{cwd}\\dist\\{inoFileNameWin7}.iss')
 
 os.chdir(f'{cwd}\dist')  # Change directory to run command
 os.system('start.')  # Run command
+
+dirsToRemove = [f'{cwd}\\build', f'{cwd}\\__pycache__', wd]
+for d in dirsToRemove:
+    if os.path.exists(d):
+        shutil.rmtree(d)
