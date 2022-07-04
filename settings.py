@@ -3,4 +3,4 @@ def init():
     counter = 1
 
 
-appVersionNo = '1.4.6'
+appVersionNo = '1.4.7'
