@@ -35,11 +35,28 @@ def change_check_value():
         start_depth_entry.config(state="normal")
 
 
+def showLoading():
+    disableAllButtonsExcept('')
+    addText('\n........')
+    for i in range(16):
+        insertText('........')
+    insertText(' Loading ')
+    for i in range(16):
+        insertText('........')
+    root.update()
+
+
+def showSuccessMsg():
+    messagebox.showinfo('Success', f'File converted successfully')
+
+
 def convertLithoToLas():
-    res = convert_Litho_LAS('LITHO')
+    showLoading()
+    convert_Litho_LAS('LITHO')
 
     txt = readLocalFile(resource_path('draft.las'))
     addText(txt)
+    showSuccessMsg()
 
     saveBtn.config(state='normal')
     explorationCheckBtn.config(state='normal')
@@ -69,40 +86,48 @@ def convertLithoPercentToLas():
                 'Error', f'Start Depth Can\'t be same as LAS START\n{str_dpt}={las_str_dpt}')
             return
 
+    showLoading()
     convert_Litho_LAS('LITHO%', str_dpt)
 
     txt = readLocalFile(resource_path('draft.las'))
     addText(txt)
+    showSuccessMsg()
 
     saveBtn.config(state='normal')
     explorationCheckBtn.config(state='normal')
 
 
 def convertROPToLas():
+    showLoading()
     convert_Litho_LAS('ROP')
 
     txt = readLocalFile(resource_path('draft.las'))
     addText(txt)
+    showSuccessMsg()
 
     saveBtn.config(state='normal')
     explorationCheckBtn.config(state='normal')
 
 
 def convertDRILLToLas():
+    showLoading()
     convert_Litho_LAS('DRILL')
 
     txt = readLocalFile(resource_path('draft.las'))
     addText(txt)
+    showSuccessMsg()
 
     saveBtn.config(state='normal')
     explorationCheckBtn.config(state='normal')
 
 
 def convertGASToLas():
+    showLoading()
     convert_Litho_LAS('GAS')
 
     txt = readLocalFile(resource_path('draft.las'))
     addText(txt)
+    showSuccessMsg()
 
     saveBtn.config(state='normal')
     explorationCheckBtn.config(state='normal')
@@ -181,8 +206,13 @@ async def saveAllFiles(filename):
         src_files = os.listdir(resource_path('out\\'))
         dest_dir = f'{filename}/LAS-Handler-Output-{date}-{time}'
         await copyFiles(src_files, dest_dir)
-        messagebox.showinfo(
-            'Success', f'Files saved successfully to\n{dest_dir}')
+        result = messagebox.askquestion(
+            'Success', f'Files saved successfully to\n\n{dest_dir}\n\nOpen output folder?')
+        if result == 'yes':
+            opd = os.getcwd()  # Get original directory
+            os.chdir(dest_dir)  # Change directory to run command
+            os.system('start.')  # Run command
+            os.chdir(opd)  # Return to original directory
 
 
 async def copyFiles(src_files, dest_dir):
@@ -210,7 +240,9 @@ def addText(txt):
 
 
 def insertText(txt):
+    txtbox.config(state="normal")
     txtbox.insert(INSERT, txt)
+    txtbox.config(state="disabled")
 
 
 def clearFiles():
