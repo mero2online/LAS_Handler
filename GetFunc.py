@@ -28,6 +28,16 @@ def convertNULL(litho):
     return arr
 
 
+def convertNULLtoNull(litho):
+    arr = list(litho)
+    for x in range(len(arr)):
+        if math.isnan(arr[x]) or arr[x] < 0:
+            arr[x] = -999.25
+        else:
+            arr[x] = arr[x]
+    return arr
+
+
 def Get_DSG_Formula(r_idx):
     return [f"='original values'!A{r_idx}",
             f"='original values'!B{r_idx}",

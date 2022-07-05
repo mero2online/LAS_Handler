@@ -2,7 +2,7 @@ import lasio
 import xlwt
 import xlwings
 import numpy as np
-from GetFunc import convertNULL
+from GetFunc import convertNULLtoNull
 
 from my_const import *
 from HelperFunc import getFinalWellDate, resource_path, readLocalFile, writeLocalFile
@@ -33,7 +33,7 @@ def gen_GAS_LAS(filename):
     colToRow = np.array(dataForExcel).T.tolist()
     finalData = []
     for x in colToRow:
-        finalData.append(convertNULL(x))
+        finalData.append(convertNULLtoNull(x))
 
     topRow = ['DEPTH (ft)', 'TG', 'C1', 'C2', 'C3', 'iC4', 'nC4', 'iC5', 'nC5']
     finalData.insert(0, topRow)
@@ -42,16 +42,20 @@ def gen_GAS_LAS(filename):
     sheet.set_panes_frozen(True)
     sheet.set_horz_split_pos(1)
     # sheet.set_vert_split_pos(1)
-
-    style = xlwt.easyxf('borders: top_color black, bottom_color black, right_color black, left_color black,\
+    styleText = 'borders: top_color black, bottom_color black, right_color black, left_color black,\
                               left thin, right thin, top thin, bottom thin;\
-                     align: horiz center; font: name Calibri, bold 1, height 220;', num_format_str='0')
+                     align: horiz center; font: name Calibri, bold 1, height 220;'
+    styleOne = xlwt.easyxf(styleText, num_format_str='0')
+    styleTwo = xlwt.easyxf(styleText)
     # font height 200: this is font with height 10 points
     sheet.col(0).width = 10*275
 
     for r_idx, row in enumerate(finalData):
         for c_idx, v in enumerate(row):
-            sheet.write(r_idx, c_idx, v, style)
+            if v == -999.25:
+                sheet.write(r_idx, c_idx, v, styleTwo)
+            else:
+                sheet.write(r_idx, c_idx, v, styleOne)
     finalFileNameXls = f'{las.well.WELL.value}_GAS_{las.well.DATE.value}_GRAVITAS'
     wb.save(resource_path(f'out\\{finalFileNameXls}.xls'))
 
