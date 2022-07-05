@@ -2,6 +2,7 @@ import lasio
 import xlwt
 import xlwings
 import numpy as np
+from GetFunc import convertNULL
 
 from my_const import *
 from HelperFunc import getFinalWellDate, resource_path, readLocalFile, writeLocalFile
@@ -29,7 +30,10 @@ def gen_GAS_LAS(filename):
         dataForExcel.append(las[curveName])
 
     # Convert column to rows
-    finalData = np.array(dataForExcel).T.tolist()
+    colToRow = np.array(dataForExcel).T.tolist()
+    finalData = []
+    for x in colToRow:
+        finalData.append(convertNULL(x))
 
     topRow = ['DEPTH (ft)', 'TG', 'C1', 'C2', 'C3', 'iC4', 'nC4', 'iC5', 'nC5']
     finalData.insert(0, topRow)

@@ -21,7 +21,7 @@ def GET_LITHO_EMPTY(litho):
 def convertNULL(litho):
     arr = list(litho)
     for x in range(len(arr)):
-        if math.isnan(arr[x]):
+        if math.isnan(arr[x]) or arr[x] < 0:
             arr[x] = 0
         else:
             arr[x] = arr[x]

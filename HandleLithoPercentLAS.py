@@ -2,7 +2,6 @@ import os
 import shutil
 import lasio
 import openpyxl
-import xlwt
 import xlrd
 from copy2 import copy2
 from openpyxl import Workbook
@@ -14,7 +13,7 @@ from openpyxl.utils import get_column_letter
 from my_const import *
 from HelperFunc import getFinalWellDate, resource_path, readLocalFile, writeLocalFile
 from NewCurvesData import newPerCurves, newPerLithCurves, modPerCurves, newPerCurvesDSG
-from GetFunc import convertNULL, GET_LITHO_EMPTY, Get_DSG_Formula, GetDSG_LAS_Header, getNewPerWellDSG, GetDSG_LAS_Header_ColorCode
+from GetFunc import convertNULL, Get_DSG_Formula, GetDSG_LAS_Header, getNewPerWellDSG, GetDSG_LAS_Header_ColorCode
 
 
 def gen_litho_Percent_LAS(filename, start_depth):
