@@ -209,10 +209,7 @@ async def saveAllFiles(filename):
         result = messagebox.askquestion(
             'Success', f'Files saved successfully to\n\n{dest_dir}\n\nOpen output folder?')
         if result == 'yes':
-            opd = os.getcwd()  # Get original directory
-            os.chdir(dest_dir)  # Change directory to run command
-            os.system('start.')  # Run command
-            os.chdir(opd)  # Return to original directory
+            os.startfile(dest_dir)
 
 
 async def copyFiles(src_files, dest_dir):

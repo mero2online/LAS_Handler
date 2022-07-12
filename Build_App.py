@@ -46,8 +46,7 @@ if platform.system() == 'Windows' and platform.release() == '10':
 elif platform.system() == 'Windows' and platform.release() == '7':
     os.system(f'{cwd}\\dist\\{inoFileNameWin7}.iss')
 
-os.chdir(f'{cwd}\dist')  # Change directory to run command
-os.system('start.')  # Run command
+os.startfile(f'{cwd}\dist')
 
 dirsToRemove = [f'{cwd}\\build', f'{cwd}\\__pycache__', wd]
 for d in dirsToRemove:
