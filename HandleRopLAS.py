@@ -1,6 +1,6 @@
 import lasio
 from openpyxl import Workbook
-from openpyxl.styles import Border, Side, Alignment, Font
+from openpyxl.styles import Border, Side, Alignment, Font, PatternFill
 
 from my_const import *
 from GetFunc import aggregate_ROP_FiveFeet, aggregate_DEPTH_FiveFeet
@@ -122,7 +122,17 @@ def gen_ROP_LAS(filename):
         ws2 = wbDT[ws2Title]
         for c_idx, col in enumerate(v, 1):
             for r_idx, value in enumerate(col, 1):
-                ws2.cell(row=r_idx, column=c_idx, value=value)
+                ws2.row_dimensions[r_idx].height = 18
+                cell = ws2.cell(row=r_idx, column=c_idx, value=value)
+                cell.font = Font(name='Times New Roman', size=11, bold=True)
+                cell.border = borderPosition
+                cell.alignment = cellAlignment
+                if value == '' and (c_idx != 1 or r_idx != 1):
+                    cell.fill = PatternFill(
+                        fgColor='969696',  fill_type="solid")
+                if c_idx == 1 or r_idx == 1:
+                    cell.fill = PatternFill(
+                        fgColor='FFFF99',  fill_type="solid")
 
     std = wbDT.get_sheet_by_name('Sheet')
     wbDT.remove_sheet(std)
