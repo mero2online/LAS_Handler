@@ -175,7 +175,14 @@ def DSG():
 
     # Convert all 'SNDSH' values to 0 and Change position of 'CEMENT'
     for idx, x in enumerate(las.keys()):
-        if (idx == 18):
+        if (idx == 17):
+            data = []
+            clay = las.keys()[idx-1]
+            for i, v in enumerate(las[x]):
+                data.append(v+las[clay][i])
+            las.delete_curve(x)
+            las.insert_curve(17, x, data)
+        elif (idx == 18):
             data = [0]*len(las[x])
             las.delete_curve(x)
             las.insert_curve(18, x, data)
